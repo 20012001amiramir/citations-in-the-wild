@@ -1,0 +1,24 @@
+name: test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  node-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18, 20, 22]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      # `node --test lib/*.test.mjs` rather than bare `node --test lib/`: some Node versions have
+      # had directory-argument regressions in the test runner (e.g. nodejs/node#50219,
+      # nodejs/node#50287) that make a bare directory path unreliable across platforms. The glob
+      # is equivalent here (lib/ has exactly one test file) and isn't exposed to that bug.
+      - run: node --test lib/*.test.mjs
+      - run: node run.mjs --mock --limit 30 --out .tmp-runs/ci
+      - run: node scripts/leaderboard.mjs
