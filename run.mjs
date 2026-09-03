@@ -18,7 +18,7 @@ const BATCH_SIZE = 25;
 const MAX_ATTEMPTS = 3; // 1 initial attempt + 2 retries
 const RETRY_BASE_MS = 300;
 
-class NonRetryableError extends Error {}
+export class NonRetryableError extends Error {}
 
 function usage() {
   return [
@@ -155,7 +155,7 @@ function mockVerify(batchEntries, batchIndex) {
   };
 }
 
-async function realVerify(args, claims) {
+export async function realVerify(args, claims) {
   let res;
   try {
     res = await fetch(`${args.api}/api/internal/verify`, {
@@ -184,20 +184,25 @@ async function realVerify(args, claims) {
 
 /**
  * Sends one batch, retrying on 5xx/network failures with linear backoff. A batch that still
- * fails after MAX_ATTEMPTS total tries (1 initial + 2 retries) is reported as `{ error: true }`
- * to the caller, which records ERROR for every id in that batch and continues with the next
- * batch — one bad batch does not abort the run.
+ * fails after `maxAttempts` total tries (default 3: 1 initial + 2 retries) is reported as
+ * `{ error: true }` to the caller, which records ERROR for every id in that batch and continues
+ * with the next batch — one bad batch does not abort the run.
+ *
+ * `sleepFn` and `backoffMs` are injectable (default: the real `timers/promises` sleep and
+ * RETRY_BASE_MS) purely so tests can drive retries in milliseconds instead of real backoff time —
+ * the CLI never passes these, so its behaviour is unchanged.
  */
-async function postBatchWithRetry(args, batchEntries, batchIndex) {
+export async function postBatchWithRetry(args, batchEntries, batchIndex, options = {}) {
+  const { sleepFn = sleep, backoffMs = RETRY_BASE_MS, maxAttempts = MAX_ATTEMPTS } = options;
   const claims = batchEntries.map((e) => e.claim);
   let lastErr;
-  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
       return args.mock ? mockVerify(batchEntries, batchIndex) : await realVerify(args, claims);
     } catch (err) {
       lastErr = err;
       if (err instanceof NonRetryableError) break;
-      if (attempt < MAX_ATTEMPTS) await sleep(RETRY_BASE_MS * attempt);
+      if (attempt < maxAttempts) await sleepFn(backoffMs * attempt);
     }
   }
   process.stderr.write(`batch ${batchIndex} (${claims.length} claims) failed: ${lastErr?.message}\n`);
@@ -208,7 +213,7 @@ function todayUtc() {
   return new Date().toISOString().slice(0, 10);
 }
 
-export async function run(args) {
+export async function run(args, retryOptions = {}) {
   const benchmarkPath = path.join(__dirname, 'benchmark', 'citations-in-the-wild.v0.json');
   const data = JSON.parse(fs.readFileSync(benchmarkPath, 'utf8'));
   const kept = dropAggregates(data.records);
@@ -230,7 +235,7 @@ export async function run(args) {
 
   for (let i = 0; i < batches.length; i++) {
     const batchEntries = batches[i];
-    const response = await postBatchWithRetry(args, batchEntries, i);
+    const response = await postBatchWithRetry(args, batchEntries, i, retryOptions);
 
     if (response.error) {
       for (const { record } of batchEntries) {
