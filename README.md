@@ -153,11 +153,11 @@ the full weekly recipe, quality gates, and the worklist for the first non-US ext
 ## robots.txt rules
 
 This corpus was built without scraping any site that disallows automated retrieval for this agent.
-**Never scrape** damiencharlotin.com, AustLII, CanLII, BAILII, or Find Case Law — all four (five
-counting the aggregator) serve a `Disallow` that covers this agent. CourtListener's public search
-API and storage, and the UK's Courts and Tribunals Judiciary site, permit it and were used
-instead. See [`benchmark/README.md` §4](benchmark/README.md#4-what-was-not-used-and-why) for the
-full per-source robots.txt breakdown and reasoning.
+**Never scrape** damiencharlotin.com, AustLII, CanLII, BAILII, or Find Case Law — all five serve a
+`Disallow` that covers this agent. CourtListener's public search API and storage, and the UK's
+Courts and Tribunals Judiciary site, permit it and were used instead. See
+[`benchmark/README.md` §4](benchmark/README.md#4-what-was-not-used-and-why) for the full
+per-source robots.txt breakdown and reasoning.
 
 ## Licence
 
