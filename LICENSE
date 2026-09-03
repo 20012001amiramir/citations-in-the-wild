@@ -1,0 +1,65 @@
+This repository carries two licences, covering two different kinds of content.
+
+================================================================================
+1. CODE — MIT License
+================================================================================
+
+Applies to: run.mjs, lib/, scripts/, work/*.py, work/search.sh, .github/, and any other
+source code in this repository.
+
+Copyright (c) 2026 Citations in the Wild contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+================================================================================
+2. DATASET & LABELS — CC BY 4.0 (Attribution 4.0 International)
+================================================================================
+
+Applies to: benchmark/citations-in-the-wild.v0.json, benchmark/README.md, work/records/*.json,
+and any other file that carries record selection, per-citation segmentation, verdict labels, or
+the benchmark's structured schema ("the Dataset").
+
+The underlying court decisions quoted and cited by the Dataset are public record and are not
+themselves subject to this licence — see benchmark/README.md §3. What is licensed here is the
+Dataset's original contribution on top of that public record: which citations were selected, how
+each was segmented into a record, the verdict labels (EXISTS_FAIL / SAYS_FAIL / PASS) and finding
+taxonomy assigned to each, and the schema itself.
+
+The Dataset is licensed under the Creative Commons Attribution 4.0 International License
+(CC BY 4.0). Human-readable summary (not a substitute for the licence):
+
+  You are free to:
+    Share   — copy and redistribute the Dataset in any medium or format
+    Adapt   — remix, transform, and build upon the Dataset for any purpose, even commercially
+
+  Under the following terms:
+    Attribution — You must give appropriate credit to "Citations in the Wild", provide a link
+    to this repository, and indicate if changes were made. You may do so in any reasonable
+    manner, but not in any way that suggests the licensor endorses you or your use.
+
+    No additional restrictions — You may not apply legal terms or technological measures that
+    legally restrict others from doing anything the licence permits.
+
+  No warranties are given. Court findings are transcribed in good faith from published opinions;
+  see benchmark/README.md §5 for known limits.
+
+Full legal text: https://creativecommons.org/licenses/by/4.0/legalcode
+
+Suggested attribution: "Citations in the Wild" (https://github.com/), verdict labels and
+selection by the benchmark's maintainers, decisions by the courts named in each record.

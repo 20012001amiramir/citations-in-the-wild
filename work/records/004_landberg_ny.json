@@ -1,0 +1,122 @@
+{
+  "decision": {
+    "case_name": "Landberg v. City of New York",
+    "court": "New York Supreme Court, Appellate Division, Second Department",
+    "jurisdiction": "US / New York",
+    "date": "2026-06-23",
+    "docket": "2025-02380",
+    "decision_url": "http://www.nycourts.gov/reporter/current/3dseries/2026/2026_03935.shtml",
+    "mirror_url": "https://www.courtlistener.com/opinion/10879078/landberg-v-city-of-new-york/",
+    "retrieved_from": "New York Official Reports via CourtListener cluster 10879078",
+    "ai_tool_found": "unidentified free public generative-AI research tool; counsel stated the fabrications were \"hallucinated by artificial intelligence\""
+  },
+  "offending": [
+    {
+      "verdict_expected": "EXISTS_FAIL",
+      "finding": "fabricated",
+      "as_cited": "Xiang Fu Ji v City of New York (13 NY3d 791, 794)",
+      "cited_case_name": "Xiang Fu Ji v City of New York",
+      "reporter_citation": "13 NY3d 791, 794",
+      "court_year": "N.Y. Ct. App.",
+      "quoted_text": "construed liberally to effectuate its remedial purpose",
+      "filing": "Plaintiff-appellant's brief",
+      "court_quote": "On two occasions, the plaintiff's brief purported to quote the nonexistent Court of Appeals case of Xiang Fu Ji v City of New York (13 NY3d 791, 794) for the proposition that Administrative Code of the City of New York § 7-210 … is a remedial statute that should be “construed liberally to effectuate its remedial purpose.” No case by that title exists at all, much less at the citation given by the plaintiff's brief.",
+      "quote_locator": "2026 NY Slip Op 03935, *2",
+      "what_actually_exists": "A real Court of Appeals case, Xiang Fu He v Troon Mgt., Inc. (34 NY3d 167), analyses Administrative Code § 7-210, but it does not contain the purported quotation. The Court of Appeals has actually held the opposite — that § 7-210, in derogation of the common law, “must be strictly construed” (Vucetovic v Epsom Downs, Inc., 10 NY3d 517, 521)."
+    },
+    {
+      "verdict_expected": "EXISTS_FAIL",
+      "finding": "fabricated",
+      "as_cited": "Hausser v Giunta (88 AD3d 969, 970)",
+      "cited_case_name": "Hausser v Giunta",
+      "reporter_citation": "88 AD3d 969, 970",
+      "court_year": "N.Y. App. Div.",
+      "quoted_text": "in the best position to monitor and control",
+      "filing": "Plaintiff-appellant's brief",
+      "court_quote": "The plaintiff's brief also contained a fictitious quote from the fictitious case of Hausser v Giunta (88 AD3d 969, 970). The plaintiff's brief on two occasions quoted that fictitious case as stating that Administrative Code § 7-210 shifted liability for sidewalk defects from the City to abutting property owners, who are “in the best position to monitor and control” the condition of adjacent walkways.",
+      "quote_locator": "2026 NY Slip Op 03935, *2",
+      "what_actually_exists": "There is a real Hausser v Giunta (217 AD2d 604, revd 88 NY2d 449) concerning sidewalk liability, but it arose in the City of Long Beach under City of Long Beach Code § 256 rather than Administrative Code § 7-210, and it does not contain the quotation."
+    },
+    {
+      "verdict_expected": "EXISTS_FAIL",
+      "finding": "fabricated",
+      "as_cited": "Lack v Lack (841 NYS2d 403, 404)",
+      "cited_case_name": "Lack v Lack",
+      "reporter_citation": "841 NYS2d 403, 404",
+      "court_year": "N.Y.",
+      "quoted_text": null,
+      "filing": "Plaintiff-appellant's brief",
+      "court_quote": "The final fictitious citation in the plaintiff's brief is to the fictitious case of Lack v Lack (841 NYS2d 403, 404), which the plaintiff's brief cited for the proposition that this Court reviews a grant of summary judgment de novo, applying the same standards as the trial court. Again, no case by that name appears at that citation, and there appears to have never been any cases in New York with that title.",
+      "quote_locator": "2026 NY Slip Op 03935, *2–*3",
+      "what_actually_exists": "Nothing. No New York case has ever borne that title."
+    },
+    {
+      "verdict_expected": "SAYS_FAIL",
+      "finding": "misrepresented",
+      "as_cited": "Campaign for Fiscal Equity v State of New York (86 NY2d 307, 318)",
+      "cited_case_name": "Campaign for Fiscal Equity v State of New York",
+      "reporter_citation": "86 NY2d 307, 318",
+      "court_year": "N.Y. Ct. App. 1995",
+      "quoted_text": null,
+      "filing": "Plaintiff-appellant's brief",
+      "court_quote": "The plaintiff's brief cited Campaign for Fiscal Equity v State of New York (86 NY2d 307, 318) for the proposition that exceptions to remedial statutes should be strictly construed. … The opinion in Campaign for Fiscal Equity does not use the words remedial or exception, or discuss how strictly statutes should be construed. The pin cite given in the plaintiff's brief refers to a section of the opinion discussing the standard for considering the sufficiency of a pleading on a motion pursuant to CPLR 3211(a)(7).",
+      "quote_locator": "2026 NY Slip Op 03935, *3",
+      "what_actually_exists": "Campaign for Fiscal Equity v State of New York, 86 NY2d 307, is a real Court of Appeals decision about public school financing; page 318 discusses the CPLR 3211(a)(7) pleading standard."
+    },
+    {
+      "verdict_expected": "SAYS_FAIL",
+      "finding": "misrepresented",
+      "as_cited": "Rodgers v. City of New York, 34 A.D.3d 555 (2d Dep't 2006)",
+      "cited_case_name": "Rodgers v City of New York",
+      "reporter_citation": "34 AD3d 555",
+      "court_year": "N.Y. App. Div. 2d Dep't 2006",
+      "quoted_text": "[w]hile Rodgers v. City of New York, 34 A.D.3d 555 (2d Dep't 2006), held that a two-year search can be sufficient, that holding is not a blanket rule applicable in all circumstances.",
+      "filing": "Plaintiff-appellant's brief",
+      "court_quote": "However, Rodgers concerned only a motion by an adjacent landowner, and not the City, and did not address the issue of prior written notice or how long a time frame a municipality must search its records in order to establish the lack of prior written notice (see Rodgers v City of New York, 34 AD3d 555, 555-556). In other words, Rodgers said nothing remotely related to whether a two-year search can be sufficient.",
+      "quote_locator": "2026 NY Slip Op 03935, *3",
+      "what_actually_exists": "Rodgers v City of New York, 34 AD3d 555, is a real Second Department decision, but it concerned a motion by an adjacent landowner and says nothing about prior written notice or record-search periods."
+    }
+  ],
+  "controls": [
+    {
+      "verdict_expected": "PASS",
+      "as_cited": "Vucetovic v Epsom Downs, Inc., 10 NY3d 517, 521",
+      "cited_case_name": "Vucetovic v Epsom Downs, Inc.",
+      "reporter_citation": "10 NY3d 517, 521",
+      "court_year": "N.Y. Ct. App. 2008",
+      "cited_for": "that a statute in derogation of the common law imposing liability where none previously existed must be strictly construed",
+      "court_quote": "… where none previously existed, must be strictly construed” (Vucetovic v Epsom Downs, Inc., 10 NY3d 517, 521 [emphasis added; internal quotation marks omitted]).",
+      "quote_locator": "2026 NY Slip Op 03935, *2"
+    },
+    {
+      "verdict_expected": "PASS",
+      "as_cited": "Xiang Fu He v Troon Mgt., Inc. (34 NY3d 167)",
+      "cited_case_name": "Xiang Fu He v Troon Mgt., Inc.",
+      "reporter_citation": "34 NY3d 167",
+      "court_year": "N.Y. Ct. App. 2019",
+      "cited_for": "as the real Court of Appeals decision analysing Administrative Code § 7-210",
+      "court_quote": "There is a real Court of Appeals case entitled Xiang Fu He v Troon Mgt., Inc. (34 NY3d 167), which analyzes Administrative Code § 7-210.",
+      "quote_locator": "2026 NY Slip Op 03935, *2"
+    },
+    {
+      "verdict_expected": "PASS",
+      "as_cited": "Mata v Avianca, Inc., 678 F Supp 3d 443, 448 (SD NY)",
+      "cited_case_name": "Mata v Avianca, Inc.",
+      "reporter_citation": "678 F Supp 3d 443, 448",
+      "court_year": "S.D.N.Y. 2023",
+      "cited_for": "the catalogue of harms flowing from the submission of fake judicial opinions",
+      "court_quote": "“Many harms flow from the submission of fake opinions. The opposing party wastes time and money in exposing the deception. The Court's time is taken from other important endeavors. The client may be deprived of arguments based on authentic judicial precedents. …” (Mata v Avianca, Inc., 678 F Supp 3d 443, 448 [SD NY] [footnote omitted]).",
+      "quote_locator": "2026 NY Slip Op 03935, *6"
+    },
+    {
+      "verdict_expected": "PASS",
+      "as_cited": "Matter of Julien v Arthur, 2026 NY Slip Op 03308, *2",
+      "cited_case_name": "Matter of Julien v Arthur",
+      "reporter_citation": "2026 NY Slip Op 03308, *2",
+      "court_year": "N.Y. App. Div. 2026",
+      "cited_for": "the description of GenAI hallucinations as citations to nonexistent cases, fabricated quotations, or misstatements of law",
+      "court_quote": "“In particular, courts have noted the risk of GenAI hallucinations, which may take the form of citations to nonexistent cases, fabricated quotations from actual cases, or misstatements of law that are not representative of what a case actually decided” (Matter of Julien v Arthur, ___ AD3d at ___, 2026 NY Slip Op 03308, *2 [internal quotation marks omitted]).",
+      "quote_locator": "2026 NY Slip Op 03935, *5"
+    }
+  ]
+}

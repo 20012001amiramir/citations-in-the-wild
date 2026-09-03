@@ -1,0 +1,6 @@
+# local scratch output from manual `--mock` runner verification (Windows has no /tmp)
+/.tmp-runs/
+
+# editor/OS noise
+.DS_Store
+Thumbs.db

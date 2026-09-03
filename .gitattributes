@@ -1,0 +1,12 @@
+* text=auto eol=lf
+
+# Copied/derived straight from the source assets (see README.md "Provenance") — kept byte-exact
+# regardless of any contributor's local core.autocrlf, so a clone never silently rewrites them.
+/benchmark/citations-in-the-wild.v0.json -text
+/benchmark/README.md -text
+/work/*.py -text
+/work/records/*.json -text
+/work/search.sh -text
+/raw/candidates.json -text
+/raw/candidates2.json -text
+/raw/s1.json -text
