@@ -53,6 +53,9 @@ quick look.
 - **`PASS`** — the authority resolves and says what it's cited for. These are the controls, so
   that a verifier which fails everything does not score well by default.
 
+The dataset documentation uses "ground truth" in its standard evaluation sense; the product site
+itself never uses the word.
+
 Five records in the raw dataset carry an aggregate court finding ("eighteen of forty-five
 citations...") rather than one specific citation; four of those five are excluded from
 per-citation scoring by `lib/score.mjs`'s `dropAggregates` (`cited_authority.as_cited` starting
