@@ -1,0 +1,38 @@
+{
+  "date": "2026-09-08",
+  "n": 219,
+  "n_scored": 100,
+  "n_insufficient": 119,
+  "insufficient_share": 0.543,
+  "partial": false,
+  "cost_usd": 0,
+  "exists": {
+    "precision": 0.679,
+    "recall": 0.514
+  },
+  "says": {
+    "match_rate": 0.271
+  },
+  "balanced_accuracy": 0.451,
+  "per_class": {
+    "EXISTS_FAIL": {
+      "p": 0.679,
+      "r": 0.826,
+      "f1": 0.745
+    },
+    "SAYS_FAIL": {
+      "p": 0,
+      "r": 0,
+      "f1": 0
+    },
+    "PASS": {
+      "p": 0.432,
+      "r": 0.528,
+      "f1": 0.475
+    }
+  },
+  "engine": {
+    "name": "exhibitb",
+    "version": "0.1.0"
+  }
+}

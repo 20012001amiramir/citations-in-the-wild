@@ -4,7 +4,9 @@ Dated runs of `run.mjs` against citations-in-the-wild, scored per [`lib/score.mj
 This table lists **our own runs only** — see [`README.md`](README.md) for what each column means
 and why we don't accept third-party-submitted numbers.
 
-No runs yet. Run the benchmark yourself (see below) to add the first row.
+| Date | n | Balanced accuracy | EXISTS P/R | SAYS match | INSUFFICIENT share | Partial |
+|---|---|---|---|---|---|---|
+| 2026-09-08 | 219 | 0.451 | 0.679 / 0.514 | 0.271 | 54.3% | no |
 
 ## Run it yourself
 
