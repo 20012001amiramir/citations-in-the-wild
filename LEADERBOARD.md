@@ -6,7 +6,7 @@ and why we don't accept third-party-submitted numbers.
 
 | Date | n | Balanced accuracy | EXISTS P/R | SAYS match | INSUFFICIENT share | Partial |
 |---|---|---|---|---|---|---|
-| 2026-09-08 | 219 | 0.451 | 0.679 / 0.514 | 0.271 | 54.3% | no |
+| 2026-09-08 | 219 | 0.667 | 1 / 0.284 | 0 | 88.1% | no |
 
 ## Run it yourself
 
