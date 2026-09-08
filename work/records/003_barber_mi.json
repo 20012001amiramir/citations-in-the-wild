@@ -7,11 +7,20 @@
     "docket": "374773",
     "decision_url": "https://www.courts.michigan.gov/49d9f9/siteassets/case-documents/uploads/opinions/final/coa/20260617_c374773_42_374773.opn.pdf",
     "mirror_url": "https://www.courtlistener.com/opinion/10876653/joyce-barber-v-lawrence-j-morawa-md/",
-    "retrieved_from": "Michigan Courts published PDF via CourtListener cluster 10876653",
-    "ai_tool_found": "artificial intelligence research tools (unidentified); counsel admitted use, including for the Notice of Correction"
+    "retrieved_from": "Michigan Courts published PDF (courts.michigan.gov); found via CourtListener cluster 10876653",
+    "ai_tool_found": "artificial intelligence research tools (unidentified); counsel admitted use, including for the Notice of Correction",
+    "issuing_court_url": "https://www.courts.michigan.gov/49d9f9/siteassets/case-documents/uploads/opinions/final/coa/20260617_c374773_42_374773.opn.pdf",
+    "url_check": {
+      "checked": "2026-09-07",
+      "decision_url": "200",
+      "mirror_url": "202, zero-byte Cloudflare bot challenge (courtlistener.com blocks automated fetchers)",
+      "issuing_court_url": "200"
+    },
+    "fallback_url": null
   },
   "offending": [
     {
+      "id": "CITW-0035",
       "verdict_expected": "EXISTS_FAIL",
       "finding": "fabricated",
       "as_cited": "People v. O'Keefe, 2019 WL 6907273",
@@ -22,9 +31,11 @@
       "filing": "Plaintiff's December 2024 motion for a protective order",
       "court_quote": "Counsel first cited fabricated authority in plaintiff's December 2024 motion for a protective order, relying on “People v. O'Keefe, 2019 WL 6907273,” regarding the exclusion of cumulative expert testimony. Defendant identified the fabricated citation in response.",
       "quote_locator": "slip op. at 4 (Part III.A)",
-      "what_actually_exists": null
+      "what_actually_exists": null,
+      "partial_citation": false
     },
     {
+      "id": "CITW-0036",
       "verdict_expected": "EXISTS_FAIL",
       "finding": "fabricated",
       "as_cited": "People v. Stubblefield, 197 Mich. App. 365 (1992)",
@@ -35,9 +46,11 @@
       "filing": "Plaintiff's February 2025 motion for a new trial or evidentiary hearing",
       "court_quote": "In plaintiff's February 2025 motion seeking a new trial or evidentiary hearing based on juror misconduct, counsel cited two nonexistent criminal cases, “People v. Stubblefield, 197 Mich. App. 365 (1992),” and “People v. Royster, 291 Mich. App. 508 (2011).”",
       "quote_locator": "slip op. at 4 (Part III.A)",
-      "what_actually_exists": null
+      "what_actually_exists": null,
+      "partial_citation": false
     },
     {
+      "id": "CITW-0037",
       "verdict_expected": "EXISTS_FAIL",
       "finding": "fabricated",
       "as_cited": "People v. Royster, 291 Mich. App. 508 (2011)",
@@ -48,9 +61,11 @@
       "filing": "Plaintiff's February 2025 motion for a new trial or evidentiary hearing",
       "court_quote": "In plaintiff's February 2025 motion seeking a new trial or evidentiary hearing based on juror misconduct, counsel cited two nonexistent criminal cases, “People v. Stubblefield, 197 Mich. App. 365 (1992),” and “People v. Royster, 291 Mich. App. 508 (2011).”",
       "quote_locator": "slip op. at 4 (Part III.A)",
-      "what_actually_exists": null
+      "what_actually_exists": null,
+      "partial_citation": false
     },
     {
+      "id": "CITW-0038",
       "verdict_expected": "EXISTS_FAIL",
       "finding": "fabricated",
       "as_cited": "Meyer v. Walker, 241 Mich. App. 295 (2000)",
@@ -61,9 +76,11 @@
       "filing": "Plaintiff's brief on appeal, Michigan Court of Appeals No. 374773",
       "court_quote": "In plaintiff's brief in this Court, counsel cited “Meyer v. Walker, 241 Mich. App. 295 (2000),” a case that does not exist, for propositions concerning presumed prejudice and the standard of review.",
       "quote_locator": "slip op. at 4 (Part III.A)",
-      "what_actually_exists": "Nothing under this name; counsel later conceded in a Notice of Correction that “Meyer is not a real case.”"
+      "what_actually_exists": "Nothing under this name; counsel later conceded in a Notice of Correction that “Meyer is not a real case.”",
+      "partial_citation": false
     },
     {
+      "id": "CITW-0039",
       "verdict_expected": "SAYS_FAIL",
       "finding": "misrepresented",
       "as_cited": "People v Budzyn, 456 Mich 77; 566 NW2d 229 (1997)",
@@ -74,9 +91,11 @@
       "filing": "Plaintiff's brief on appeal",
       "court_quote": "Counsel also repeatedly cited real authorities for propositions they do not support. For example, counsel cited People v Budzyn, 456 Mich 77; 566 NW2d 229 (1997), for the proposition that a “trial court's handling of juror misconduct allegations is reviewed for an abuse of discretion,” but Budzyn states no such standard.",
       "quote_locator": "slip op. at 4 (Part III.A)",
-      "what_actually_exists": "People v Budzyn, 456 Mich 77 (1997) is a real Michigan Supreme Court decision but states no such standard of review."
+      "what_actually_exists": "People v Budzyn, 456 Mich 77 (1997) is a real Michigan Supreme Court decision but states no such standard of review.",
+      "partial_citation": false
     },
     {
+      "id": "CITW-0040",
       "verdict_expected": "SAYS_FAIL",
       "finding": "misrepresented",
       "as_cited": "People v Miller, 482 Mich 540; 759 NW2d 850 (2008)",
@@ -87,9 +106,11 @@
       "filing": "Plaintiff's brief on appeal",
       "court_quote": "Counsel similarly cited People v Miller, 482 Mich 540; 759 NW2d 850 (2008), for the proposition that a “trial court's management of trial procedures, including exhibit availability and deliberation duration” is reviewed for an abuse of discretion, but Miller addressed neither issue. In short, most of the citations in plaintiff's initial brief on appeal do not support the propositions for which they are offered.",
       "quote_locator": "slip op. at 4 (Part III.A)",
-      "what_actually_exists": "People v Miller, 482 Mich 540 (2008) is real but addressed neither exhibit availability nor deliberation duration."
+      "what_actually_exists": "People v Miller, 482 Mich 540 (2008) is real but addressed neither exhibit availability nor deliberation duration.",
+      "partial_citation": false
     },
     {
+      "id": "CITW-0041",
       "verdict_expected": "SAYS_FAIL",
       "finding": "false_quote",
       "as_cited": "People v Miller, 482 Mich at 548-552",
@@ -100,11 +121,13 @@
       "filing": "Plaintiff's counsel's \"Notice of Correction\" on appeal",
       "court_quote": "But the Notice of Correction did not cure the problem. Counsel purported to substitute valid authorities for the fabricated and unsupported ones, but those substitute authorities still did not support the propositions for which counsel offered them. Most notably, counsel attributed to Miller, 482 Mich at 548-552, quotations concerning “extraneous prejudicial information” and “outside influence.” Those phrases do not appear in Miller. They appear instead in MRE 606(b)(2), which Miller does not discuss.",
       "quote_locator": "slip op. at 5 (Part III.A)",
-      "what_actually_exists": "The quoted phrases appear in Michigan Rule of Evidence 606(b)(2), not in People v Miller; Miller does not discuss that rule."
+      "what_actually_exists": "The quoted phrases appear in Michigan Rule of Evidence 606(b)(2), not in People v Miller; Miller does not discuss that rule.",
+      "partial_citation": false
     }
   ],
   "controls": [
     {
+      "id": "CITW-0042",
       "verdict_expected": "PASS",
       "as_cited": "Sherry v East Suburban Football League, 292 Mich App 23, 31; 807 NW2d 859 (2011)",
       "cited_case_name": "Sherry v East Suburban Football League",
@@ -112,9 +135,11 @@
       "court_year": "Mich. Ct. App. 2011",
       "cited_for": "that an affidavit lacking notarization is invalid and a trial court need not consider it",
       "court_quote": "See Sherry v East Suburban Football League, 292 Mich App 23, 31; 807 NW2d 859 (2011) (“Because an affidavit lacking notarization is invalid, a trial court need not consider it.”).",
-      "quote_locator": "slip op. at 3 (Part II)"
+      "quote_locator": "slip op. at 3 (Part II)",
+      "partial_citation": false
     },
     {
+      "id": "CITW-0043",
       "verdict_expected": "PASS",
       "as_cited": "Mettler Walloon, LLC v Melrose Twp, 281 Mich App 184, 220; 761 NW2d 293 (2008)",
       "cited_case_name": "Mettler Walloon, LLC v Melrose Twp",
@@ -122,9 +147,11 @@
       "court_year": "Mich. Ct. App. 2008",
       "cited_for": "that an argument is abandoned when the litigant fails to cite supporting authority",
       "court_quote": "See Mettler Walloon, LLC v Melrose Twp, 281 Mich App 184, 220; 761 NW2d 293 (2008) (deeming an argument abandoned when the litigant failed to cite supporting authority).",
-      "quote_locator": "slip op. at 3–4 (Part II)"
+      "quote_locator": "slip op. at 3–4 (Part II)",
+      "partial_citation": false
     },
     {
+      "id": "CITW-0044",
       "verdict_expected": "PASS",
       "as_cited": "Nixon v Ken Ganley Ford West, 798 F Supp 3d 770, 778 (ND Ohio, 2025)",
       "cited_case_name": "Nixon v Ken Ganley Ford West",
@@ -132,9 +159,11 @@
       "court_year": "N.D. Ohio 2025",
       "cited_for": "that relying on generative AI or citing authorities that do not exist subjects a person to Rule 11 sanctions",
       "court_quote": "“Relying on generative AI or citing authorities that do not, in fact, exist subjects a person to sanctions under Rule 11.” Nixon v Ken Ganley Ford West, 798 F Supp 3d 770, 778 (ND Ohio, 2025).",
-      "quote_locator": "slip op. at 6 (Part III.A)"
+      "quote_locator": "slip op. at 6 (Part III.A)",
+      "partial_citation": false
     },
     {
+      "id": "CITW-0045",
       "verdict_expected": "PASS",
       "as_cited": "Wadsworth v Walmart Inc, 348 FRD 489, 495 (D Wyo, 2025)",
       "cited_case_name": "Wadsworth v Walmart Inc",
@@ -142,9 +171,11 @@
       "court_year": "D. Wyo. 2025",
       "cited_for": "that using a fake opinion to support an argument violates Rule 11(b)(2)",
       "court_quote": "See also Wadsworth v Walmart Inc, 348 FRD 489, 495 (D Wyo, 2025) (“[U]sing a fake opinion to support an argument is a violation of Rule 11(b)(2).”).",
-      "quote_locator": "slip op. at 6 (Part III.A)"
+      "quote_locator": "slip op. at 6 (Part III.A)",
+      "partial_citation": false
     },
     {
+      "id": "CITW-0046",
       "verdict_expected": "PASS",
       "as_cited": "Benjamin v Costco Wholesale Corp, 779 F Supp 3d 341, 348 (ED NY, 2025)",
       "cited_case_name": "Benjamin v Costco Wholesale Corp",
@@ -152,7 +183,8 @@
       "court_year": "E.D.N.Y. 2025",
       "cited_for": "that readily admitting the mistake does not change the failure to make the reasonable inquiry Rule 11 requires",
       "court_quote": "Even where an attorney has “readily admitted” to such a mistake, it does not change that they have “fail[ed] to make the ‘reasonable inquiry’ required by Rule 11.” Benjamin v Costco Wholesale Corp, 779 F Supp 3d 341, 348 (ED NY, 2025).",
-      "quote_locator": "slip op. at 6 (Part III.A)"
+      "quote_locator": "slip op. at 6 (Part III.A)",
+      "partial_citation": false
     }
   ]
 }

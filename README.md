@@ -19,7 +19,8 @@ This repo is that dataset (`benchmark/`), the pipeline that built it (`work/`), 
 ## What's in it
 
 ```
-benchmark/citations-in-the-wild.v0.json   the dataset: 223 records, 13 source decisions
+benchmark/citations-in-the-wild.v0.1.json the dataset: 225 records, 13 source decisions
+benchmark/citations-in-the-wild.v0.json   the v0 release, kept as published (CHANGELOG.md)
 benchmark/README.md                       full schema, provenance, licence and known limits
 work/                                      the harvest -> fetch -> triage -> transcribe -> build
                                            pipeline that produced the dataset (Python)
@@ -56,14 +57,15 @@ quick look.
 The dataset documentation uses "ground truth" in its standard evaluation sense; the product site
 itself never uses the word.
 
-Five records in the raw dataset carry an aggregate court finding ("eighteen of forty-five
-citations...") rather than one specific citation; four of those five are excluded from
-per-citation scoring by `lib/score.mjs`'s `dropAggregates` (`cited_authority.as_cited` starting
-with the literal tag `[Aggregate finding]`, case-insensitively). The fifth, `CITW-0140`, merely
-lacks a case *name* — it is a single, fully itemised citation with its own reporter cite and
-finding — so it is deliberately kept. See the doc comment on `isAggregateRecord` in
-[`lib/score.mjs`](lib/score.mjs) for the full reasoning, including why "5" in the prose above
-resolves to 4 excluded ids in the actual v0 file.
+Not every record can be scored citation by citation. From v0.1 each record carries
+`citation_completeness`: `full` (the court printed a citation string a verifier can run against),
+`partial` (the court named the parties but never reproduced the citation — two Shahid records) or
+`aggregate` (a bulk finding such as "eighteen of forty-five citations..." — four records).
+`lib/score.mjs`'s `dropUnscoreable` keeps only `full`, which is the file's own
+`counts.scoreable_per_citation` (219 of 225). A record without the field is a v0 record, where the
+only exclusion is the literal `[Aggregate finding]` tag at the start of `cited_authority.as_cited`
+(`isAggregateRecord`, case-insensitive; 4 of 223). `CITW-0140` is deliberately kept under both
+rules: it is a single, fully itemised citation that merely lacked a case *name* in v0.
 
 ## How to run
 
@@ -168,7 +170,7 @@ Two licences, covering two different kinds of content — see [`LICENSE`](LICENS
 text:
 
 - **Code** (`run.mjs`, `lib/`, `scripts/`, `work/*.py`, `.github/`) — MIT.
-- **Dataset & labels** (`benchmark/citations-in-the-wild.v0.json`, `benchmark/README.md`,
+- **Dataset & labels** (`benchmark/citations-in-the-wild.v*.json`, `benchmark/README.md`,
   `work/records/*.json`) — CC BY 4.0. The underlying court decisions are public record and are not
   themselves covered by this licence; what's licensed is this benchmark's own contribution on top
   of them — selection, per-citation segmentation, verdict labels, and schema. Decisions are public

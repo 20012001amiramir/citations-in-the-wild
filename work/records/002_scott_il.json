@@ -7,13 +7,22 @@
     "docket": "1-25-1462",
     "decision_url": "https://www.illinoiscourts.gov/resources/23d7df84-ed51-48df-8477-3a6872db40d5/file",
     "mirror_url": "https://www.courtlistener.com/opinion/10935788/scott-v-illinois-human-rights-commn/",
-    "retrieved_from": "Illinois Courts published PDF via CourtListener cluster 10935788",
-    "ai_tool_found": "ChatGPT (counsel stated he uses a \"premier corporate subscription of ChatGPT\")"
+    "retrieved_from": "Illinois Courts published PDF (illinoiscourts.gov); found via CourtListener cluster 10935788",
+    "ai_tool_found": "ChatGPT (counsel stated he uses a \"premier corporate subscription of ChatGPT\")",
+    "issuing_court_url": "https://www.illinoiscourts.gov/resources/23d7df84-ed51-48df-8477-3a6872db40d5/file",
+    "url_check": {
+      "checked": "2026-09-07",
+      "decision_url": "200",
+      "mirror_url": "202, zero-byte Cloudflare bot challenge (courtlistener.com blocks automated fetchers)",
+      "issuing_court_url": "200"
+    },
+    "fallback_url": null
   },
   "offending": [
     {
+      "id": "CITW-0018",
       "verdict_expected": "EXISTS_FAIL",
-      "finding": "fabricated",
+      "finding": "wrong_citation",
       "as_cited": "Harris v. Illinois Human Rights Comm'n, 2022 IL App (1st) 210454",
       "cited_case_name": "Harris v. Illinois Human Rights Comm'n",
       "reporter_citation": "2022 IL App (1st) 210454",
@@ -22,9 +31,11 @@
       "filing": "Petitioner's opening brief",
       "court_quote": "Petitioner's briefs also contain false case citations. One such case, “Harris v. Illinois Human Rights Comm'n, 2022 IL App (1st) 210454,” does not exist at all. The citation 2022 IL App (1st) 210454-U leads to a criminal case named People v. Riley-Palmer.",
       "quote_locator": "¶ 26",
-      "what_actually_exists": "The neutral citation 2022 IL App (1st) 210454-U exists but belongs to People v. Riley-Palmer, a criminal case unrelated to human rights law."
+      "what_actually_exists": "The neutral citation 2022 IL App (1st) 210454-U exists but belongs to People v. Riley-Palmer, a criminal case unrelated to human rights law.",
+      "partial_citation": false
     },
     {
+      "id": "CITW-0019",
       "verdict_expected": "SAYS_FAIL",
       "finding": "false_quote",
       "as_cited": "Gusciara v. Lustig, 346 Ill. App. 3d 1012 (2004)",
@@ -35,9 +46,11 @@
       "filing": "Petitioner's opening brief",
       "court_quote": "In addition, petitioner quotes language that does not appear in the cases cited. For example, Gusciara v. Lustig, 346 Ill. App. 3d 1012 (2004), does not include a “definition of arbitrary and capricious action.”",
       "quote_locator": "¶ 27",
-      "what_actually_exists": "Gusciara v. Lustig, 346 Ill. App. 3d 1012 (2004) is a real Illinois Appellate Court decision but contains no definition of arbitrary and capricious action."
+      "what_actually_exists": "Gusciara v. Lustig, 346 Ill. App. 3d 1012 (2004) is a real Illinois Appellate Court decision but contains no definition of arbitrary and capricious action.",
+      "partial_citation": false
     },
     {
+      "id": "CITW-0020",
       "verdict_expected": "SAYS_FAIL",
       "finding": "false_quote",
       "as_cited": "Village of Oak Lawn v. Illinois Human Rights Comm'n, 133 Ill. App. 3d 221 (1985)",
@@ -48,9 +61,11 @@
       "filing": "Petitioner's opening brief",
       "court_quote": "Village of Oak Lawn v. Illinois Human Rights Comm'n, 133 Ill. App. 3d 221 (1985), does not define “substantial evidence” as “evidence a reasonable mind might accept as sufficient to support a conclusion.”",
       "quote_locator": "¶ 27",
-      "what_actually_exists": "Village of Oak Lawn v. Illinois Human Rights Comm'n, 133 Ill. App. 3d 221 (1985) is real but contains no such definition of substantial evidence."
+      "what_actually_exists": "Village of Oak Lawn v. Illinois Human Rights Comm'n, 133 Ill. App. 3d 221 (1985) is real but contains no such definition of substantial evidence.",
+      "partial_citation": false
     },
     {
+      "id": "CITW-0021",
       "verdict_expected": "SAYS_FAIL",
       "finding": "false_quote",
       "as_cited": "Abrahamson v. Illinois Department of Professional Regulation, 153 Ill. 2d 76, 88 (1992)",
@@ -61,9 +76,11 @@
       "filing": "Petitioner's opening brief",
       "court_quote": "And Abrahamson v. Illinois Department of Professional Regulation, 153 Ill. 2d 76, 88 (1992), does not describe a “reasoned consideration” standard for agency decisions.",
       "quote_locator": "¶ 27",
-      "what_actually_exists": "Abrahamson, 153 Ill. 2d 76 (1992) is a real Illinois Supreme Court decision but describes no “reasoned consideration” standard."
+      "what_actually_exists": "Abrahamson, 153 Ill. 2d 76 (1992) is a real Illinois Supreme Court decision but describes no “reasoned consideration” standard.",
+      "partial_citation": false
     },
     {
+      "id": "CITW-0022",
       "verdict_expected": "SAYS_FAIL",
       "finding": "misrepresented",
       "as_cited": "Abrahamson v. Illinois Department of Professional Regulation, 153 Ill. 2d 76 (1992)",
@@ -74,9 +91,11 @@
       "filing": "Petitioner's opening brief",
       "court_quote": "Finally, petitioner cites cases that do not support the propositions of law for which petitioner cites them. For example, petitioner cites Abrahamson for the proposition that “[w]hether an administrative agency correctly applied the law is subject to de novo review.” But Abrahamson does not mention de novo review.",
       "quote_locator": "¶ 28",
-      "what_actually_exists": "Abrahamson is real but does not mention de novo review."
+      "what_actually_exists": "Abrahamson is real but does not mention de novo review.",
+      "partial_citation": false
     },
     {
+      "id": "CITW-0023",
       "verdict_expected": "SAYS_FAIL",
       "finding": "misrepresented",
       "as_cited": "Hall v. Naper Gold Hospitality, LLC, 2012 IL App (2d) 111151, ¶ 7",
@@ -87,9 +106,11 @@
       "filing": "Petitioner's opening brief",
       "court_quote": "Petitioner also cites Hall v. Naper Gold Hospitality, LLC, 2012 IL App (2d) 111151, ¶ 7, to claim that “Illinois reviewing courts routinely decline to strike briefs where the issues presented are sufficiently clear to permit meaningful review.” But paragraph 7 of Hall actually supports striking briefs as a sanction for noncompliance with Illinois Supreme Court rules. Id. ¶¶ 7, 15.",
       "quote_locator": "¶ 28",
-      "what_actually_exists": "Hall v. Naper Gold Hospitality, LLC, 2012 IL App (2d) 111151 is real; ¶¶ 7 and 15 support the opposite proposition — striking briefs as a sanction for rule noncompliance."
+      "what_actually_exists": "Hall v. Naper Gold Hospitality, LLC, 2012 IL App (2d) 111151 is real; ¶¶ 7 and 15 support the opposite proposition — striking briefs as a sanction for rule noncompliance.",
+      "partial_citation": false
     },
     {
+      "id": "CITW-0024",
       "verdict_expected": "SAYS_FAIL",
       "finding": "misrepresented",
       "as_cited": "Whipple v. Department of Rehabilitation Services, 269 Ill. App. 3d 554 (1995)",
@@ -100,9 +121,11 @@
       "filing": "Petitioner's opening brief",
       "court_quote": "Petitioner cites Whipple v. Department of Rehabilitation Services, 269 Ill. App. 3d 554 (1995), for the proposition that “[a]n appellate court's review of a Human Rights Commission order follows the same framework applicable under the Administrative Review Law,” but Whipple says no such thing.",
       "quote_locator": "¶ 28",
-      "what_actually_exists": "Whipple v. Department of Rehabilitation Services, 269 Ill. App. 3d 554 (1995) is real but says no such thing."
+      "what_actually_exists": "Whipple v. Department of Rehabilitation Services, 269 Ill. App. 3d 554 (1995) is real but says no such thing.",
+      "partial_citation": false
     },
     {
+      "id": "CITW-0025",
       "verdict_expected": "SAYS_FAIL",
       "finding": "false_quote",
       "authority_type": "statute",
@@ -114,9 +137,11 @@
       "filing": "Petitioner's opening brief, \"Statutes Involved\" section",
       "court_quote": "Instead, petitioner misquotes inapplicable statutes and fabricates statutory language. Petitioner's brief's “Statutes Involved” section claims that section 7A-102(D)(2) of the Act provides: “The Department shall conduct a full investigation of the allegations set forth in the charge and shall determine whether substantial evidence exists that a civil rights violation has been committed.”",
       "quote_locator": "¶ 21",
-      "what_actually_exists": "Section 7A-102(D)(2) actually provides: “Upon review of the [Department's] report, the Director shall determine whether there is substantial evidence that the alleged civil rights violation has been committed. …” There is no “full investigation” requirement; the court held the requirement was “a product of AI-hallucinated language” (¶ 44)."
+      "what_actually_exists": "Section 7A-102(D)(2) actually provides: “Upon review of the [Department's] report, the Director shall determine whether there is substantial evidence that the alleged civil rights violation has been committed. …” There is no “full investigation” requirement; the court held the requirement was “a product of AI-hallucinated language” (¶ 44).",
+      "partial_citation": false
     },
     {
+      "id": "CITW-0026",
       "verdict_expected": "SAYS_FAIL",
       "finding": "false_quote",
       "authority_type": "statute",
@@ -128,9 +153,11 @@
       "filing": "Petitioner's opening brief",
       "court_quote": "Respondents identified the two false quotations discussed above, but petitioner's brief also claims that section 8-111(B)(1) of the Act provides: “Any complainant or respondent aggrieved by a final order of the Commission may obtain judicial review thereof in the Appellate Court for the district in which the alleged civil rights violation occurred, in accordance with the provisions of the Administrative Review Law, as modified by Supreme Court Rule 335.”",
       "quote_locator": "¶ 23",
-      "what_actually_exists": "Section 8-111(B)(1) actually provides: “Any complainant or respondent may apply for and obtain judicial review of a final order of the Commission entered under this Act by filing a petition for review in the Appellate Court within 35 days from the date that a copy of the decision sought to be reviewed was served upon the party affected by the decision. …”"
+      "what_actually_exists": "Section 8-111(B)(1) actually provides: “Any complainant or respondent may apply for and obtain judicial review of a final order of the Commission entered under this Act by filing a petition for review in the Appellate Court within 35 days from the date that a copy of the decision sought to be reviewed was served upon the party affected by the decision. …”",
+      "partial_citation": false
     },
     {
+      "id": "CITW-0027",
       "verdict_expected": "EXISTS_FAIL",
       "finding": "fabricated",
       "authority_type": "statute",
@@ -142,11 +169,13 @@
       "filing": "Attorney Cole's response to the show-cause order, footnote 1",
       "court_quote": "Frustratingly, attorney Cole's response itself contains misstatements of law. Footnote 1 claims that “under 775 ILCS 5/7A-102(D)(2)(a), if the Director determines there is a lack of substantial evidence, the Department will dismiss the charge.” The applicable version of section 7A-102 has no subsection (D)(2)(a). … Moreover, the “substantial evidence” language attorney Cole purports to quote appears in subsection (D)(3), not (D)(2).",
       "quote_locator": "¶ 38",
-      "what_actually_exists": "There is no subsection (D)(2)(a) in the applicable version of § 7A-102; the legislature removed it effective 1 January 2008 (Pub. Act 95-243). The quoted “substantial evidence” language appears in subsection (D)(3)."
+      "what_actually_exists": "There is no subsection (D)(2)(a) in the applicable version of § 7A-102; the legislature removed it effective 1 January 2008 (Pub. Act 95-243). The quoted “substantial evidence” language appears in subsection (D)(3).",
+      "partial_citation": false
     }
   ],
   "controls": [
     {
+      "id": "CITW-0028",
       "verdict_expected": "PASS",
       "as_cited": "Jabbari v. Human Rights Comm'n, 173 Ill. App. 3d 227, 232 (1988)",
       "cited_case_name": "Jabbari v. Human Rights Comm'n",
@@ -154,9 +183,11 @@
       "court_year": "Ill. App. Ct. 1988",
       "cited_for": "the division of function between the Department (investigative) and the Commission (adjudicative)",
       "court_quote": "Essentially, the Department decides whether there is sufficient evidence to bring a charge of workplace discrimination, and the Commission decides whether the complainant has proved his or her charge of discrimination. Jabbari, 173 Ill. App. 3d at 232.",
-      "quote_locator": "¶ 3"
+      "quote_locator": "¶ 3",
+      "partial_citation": false
     },
     {
+      "id": "CITW-0029",
       "verdict_expected": "PASS",
       "as_cited": "Folbert v. Department of Human Rights, 303 Ill. App. 3d 13, 21 (1999)",
       "cited_case_name": "Folbert v. Department of Human Rights",
@@ -164,9 +195,11 @@
       "court_year": "Ill. App. Ct. 1999",
       "cited_for": "the respective roles of the Department and the Commission under the Illinois Human Rights Act",
       "court_quote": "This case involves the Department, which is an investigative agency, and the Commission, which is an adjudicative agency. See Folbert v. Department of Human Rights, 303 Ill. App. 3d 13, 21 (1999); Jabbari v. Human Rights Comm'n, 173 Ill. App. 3d 227, 232 (1988).",
-      "quote_locator": "¶ 3"
+      "quote_locator": "¶ 3",
+      "partial_citation": false
     },
     {
+      "id": "CITW-0030",
       "verdict_expected": "PASS",
       "as_cited": "Peck v. Department of Human Rights, 234 Ill. App. 3d 334, 338 (1992)",
       "cited_case_name": "Peck v. Department of Human Rights",
@@ -174,9 +207,11 @@
       "court_year": "Ill. App. Ct. 1992",
       "cited_for": "that the reviewing court reviews the Commission's final order, not the Department's findings",
       "court_quote": "… the Commission's final order, not the Department's findings. Peck v. Department of Human Rights, 234 Ill. App. 3d 334, 338 (1992).",
-      "quote_locator": "¶ 16"
+      "quote_locator": "¶ 16",
+      "partial_citation": false
     },
     {
+      "id": "CITW-0031",
       "verdict_expected": "PASS",
       "as_cited": "In re Baby Boy, 2025 IL App (4th) 241427, ¶ 118",
       "cited_case_name": "In re Baby Boy",
@@ -184,9 +219,11 @@
       "court_year": "Ill. App. Ct. 2025",
       "cited_for": "that citation to a fake opinion does not provide a non-frivolous ground for extending, modifying or reversing existing law",
       "court_quote": "Arguments based on AI-hallucinated citations are frivolous because “citation to a fake opinion does not provide a non-frivolous ground for extending, modifying, or reversing existing law, or for establishing new law.” (Internal quotation marks omitted.) Baby Boy, 2025 IL App (4th) 241427, ¶ 118.",
-      "quote_locator": "¶ 44"
+      "quote_locator": "¶ 44",
+      "partial_citation": false
     },
     {
+      "id": "CITW-0032",
       "verdict_expected": "PASS",
       "as_cited": "Perez-Castillo v. Blanche, 177 F.4th 837, 848 (7th Cir. 2026)",
       "cited_case_name": "Perez-Castillo v. Blanche",
@@ -194,9 +231,11 @@
       "court_year": "7th Cir. 2026",
       "cited_for": "that the Seventh Circuit fined an attorney $5,000 for briefs containing many AI hallucinations and warned of disbarment on any repeat",
       "court_quote": "Recently, the Seventh Circuit fined an attorney $5,000 for filing briefs containing “many AI hallucinations” and warned that “the next time any incident occurs, he could be subject to disbarment before this court.” Perez-Castillo v. Blanche, 177 F.4th 837, 848 (7th Cir. 2026).",
-      "quote_locator": "¶ 50"
+      "quote_locator": "¶ 50",
+      "partial_citation": false
     },
     {
+      "id": "CITW-0033",
       "verdict_expected": "PASS",
       "as_cited": "Whiting v. City of Athens, 170 F.4th 455, 458 (6th Cir. 2026)",
       "cited_case_name": "Whiting v. City of Athens",
@@ -204,9 +243,11 @@
       "court_year": "6th Cir. 2026",
       "cited_for": "that the appellant's briefs there included dozens of fake citations and misrepresentations of fact",
       "court_quote": "For example, in a Sixth Circuit case, the appellant's briefs included dozens of fake citations and misrepresentations of fact. Whiting v. City of Athens, 170 F.4th 455, 458 (6th Cir. 2026).",
-      "quote_locator": "¶ 51"
+      "quote_locator": "¶ 51",
+      "partial_citation": false
     },
     {
+      "id": "CITW-0034",
       "verdict_expected": "PASS",
       "as_cited": "Noland v. Land of the Free, L.P., 336 Cal. Rptr. 5th 426, 430 (Ct. App. 2025)",
       "cited_case_name": "Noland v. Land of the Free, L.P.",
@@ -214,7 +255,8 @@
       "court_year": "Cal. Ct. App. 2025",
       "cited_for": "that no filing should contain citations the responsible attorney has not personally read and verified",
       "court_quote": "“[N]o brief, pleading, motion, or any other paper filed in any court should contain any citations—whether provided by generative AI or any other source—that the attorney responsible for submitting the pleading has not personally read and verified.” (Emphasis in original.) Noland v. Land of the Free, L.P., 336 Cal. Rptr. 5th 426, 430 (Ct. App. 2025).",
-      "quote_locator": "¶ 48"
+      "quote_locator": "¶ 48",
+      "partial_citation": false
     }
   ]
 }

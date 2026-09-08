@@ -1,26 +1,36 @@
 > This file documents the dataset only. For what this repo is, how to run the benchmark, and
 > licensing, see [`../README.md`](../README.md).
 
-# Citations in the Wild — v0
+# Citations in the Wild — v0.1
 
-A seed benchmark of citations that courts have themselves ruled on: 153 offending citations a
+A seed benchmark of citations that courts have themselves ruled on: 155 offending citations a
 court found fabricated, misquoted or misrepresented, and 70 control citations from the same
 decisions that the court relied on and that say what they are cited for.
 
-**File:** `citations-in-the-wild.v0.json` (223 records, 13 source decisions, 12 jurisdictions)
+**File:** `citations-in-the-wild.v0.1.json` (225 records, 13 source decisions, 12 jurisdictions)
+**Changes since v0:** `../CHANGELOG.md`
 
 | | count |
 |---|---|
-| Records total | 223 |
-| Offending | 153 |
+| Records total | 225 |
+| Offending | 155 |
 | Controls | 70 |
-| `EXISTS_FAIL` | 76 |
+| `EXISTS_FAIL` | 78 |
 | `SAYS_FAIL` | 77 |
 | `PASS` | 70 |
+| Scoreable per citation | 219 |
 | Source decisions | 13 |
 
-Findings among offending records: `fabricated` 69, `misrepresented` 42, `false_quote` 35,
-`wrong_citation` 7.
+Findings among offending records: `misrepresented` 42, `fabricated` 41, `wrong_citation` 37,
+`false_quote` 35.
+
+`fabricated` and `wrong_citation` are not the courts' vocabulary, they are this benchmark's. A
+court routinely writes "that case does not exist" and then, in the next sentence, names the real
+authority sitting at the reporter reference the filing gave. v0 followed the courts' word choice
+and published `fabricated` 69 / `wrong_citation` 7. That headline was wrong for the taxonomy it
+was labelled with: 30 of those 69 records carried a `what_actually_exists` naming a real
+authority. They are `wrong_citation` in v0.1. **No verdict changed** — a citation that resolves
+to a different case still fails EXISTS.
 
 ---
 
@@ -36,6 +46,7 @@ One record = one citation, as it appeared in a filing, plus the court's own verb
   "checks_expected": { "EXISTS": "FAIL", "SAYS": "NOT_REACHED" },
   "finding": "fabricated",
   "authority_type": "case",            // case | statute | court_rule
+  "citation_completeness": "full",     // full | partial | aggregate — see § 1
   "cited_authority": {
     "as_cited": "Eduardo v. Garland, 28 F.4th 742 (9th Cir. 2022)",
     "case_name": "Eduardo v. Garland",
@@ -50,9 +61,23 @@ One record = one citation, as it appeared in a filing, plus the court's own verb
     "locator": "slip op. at 6"
   },
   "what_actually_exists": "Nothing under this name. Counsel's Motion to Correct sought to …",
-  "source_decision": { "case_name": "…", "court": "…", "decision_url": "…", … }
+  "record_note": null,                 // set where a record needs its own caveat
+  "source_decision": {
+    "case_name": "…", "court": "…", "docket": "…",
+    "decision_url": "…",               // 200 as of url_check.checked
+    "mirror_url": "…",                 // CourtListener cluster page
+    "issuing_court_url": "…",          // the court's own link, recorded even when it 404s
+    "fallback_url": null,              // a third copy, where one was needed
+    "url_check": { "checked": "2026-09-07", "decision_url": "200", … },
+    …
+  }
 }
 ```
+
+Records are ordered by source decision, then offending, then controls. Ids are stable across
+versions, so once a record is added mid-file the id sequence is no longer strictly ascending in
+document order — sort by `id` if you need that. Never renumber; a v0 id means the same citation
+in v0.1.
 
 ### Verdict semantics
 
@@ -69,12 +94,24 @@ EXHIBIT B runs two checks on every cited source: **EXISTS** (the source resolves
 
 `wrong_citation` is scored `EXISTS_FAIL` deliberately: the case name may exist somewhere, but the
 citation string handed to the verifier does not resolve to it. That is the failure mode a
-re-fetching system actually encounters.
+re-fetching system actually encounters. The split between `fabricated` and `wrong_citation` is a
+statement about what the court found *behind* the citation, never about the verdict.
 
-Where a court reported only an aggregate finding (for example "eighteen of forty-five citations do
-not exist") without naming the individual citations, the record carries the aggregate as a single
-record and says so in `cited_authority.as_cited`. There are 5 such aggregate records; they are
-useful as narrative evidence but should be excluded when scoring a verifier per-citation.
+### Citation completeness
+
+`citation_completeness` says whether the record carries something a verifier can actually run:
+
+- **`full`** (219 records) — the court printed a citation string. Score these.
+- **`aggregate`** (4 records) — the court made a bulk finding ("eighteen of forty-five citations
+  do not exist") without naming the individual citations. Flagged in `as_cited` with the
+  `[Aggregate finding]` prefix.
+- **`partial`** (2 records) — the court named the parties but never reproduced the citation.
+  Both are in *Shahid v. Esaam*: the **Epps** and **Hodge** citations that reached the superior
+  court's own order and caused it to be vacated. They are the most consequential fabrications in
+  that case and belong in the corpus; they are flagged with the `[Partial citation]` prefix.
+
+Exclude `aggregate` and `partial` when scoring a verifier per citation — `counts.scoreable_per_citation`
+is the denominator to use.
 
 ---
 
@@ -95,15 +132,75 @@ taken from a secondary summary, and nothing was inferred.
 | Prososki v. Regan, 321 Neb. 38 | Nebraska Supreme Court | 2026-03-20 | 28 |
 | Capital Standard, LLC v. U.S. Bank N.A., 2D2024-1392 | Florida 2d DCA | 2026-08-21 | 14 |
 | Ibach v. Stewart, SC-2025-0106 | Supreme Court of Alabama | 2026-04-24 | 28 |
-| Shahid v. Esaam | Court of Appeals of Georgia | 2025-06-30 | 20 |
+| Shahid v. Esaam, A25A0196 | Court of Appeals of Georgia | 2025-06-30 | 22 |
 | R (Ayinde) v Haringey; Al-Haroun v QNB, [2025] EWHC 1383 (Admin) | High Court (Div. Ct.), England & Wales | 2025-06-06 | 13 |
-| Zavadovsky v. Republic of Austria | US District Court, D.D.C. | 2026-03-31 | 13 |
+| Zavadovsky v. Republic of Austria, 1:25-cv-01008 (RC) | US District Court, D.D.C. | 2026-03-31 | 13 |
 | Deutsche Bank Nat'l Trust Co. v. LeTennier | NY App. Div., 3d Dep't | 2026-01-08 | 7 |
 | Noland v. Land of the Free, L.P., 114 Cal. App. 5th 426 | California Court of Appeal, 2d Dist. | 2025-09-12 | 14 |
 
-Each record carries `source_decision.decision_url` (the court's own published document wherever
-one is available — ca9.uscourts.gov, illinoiscourts.gov, courts.michigan.gov, nycourts.gov,
-flcourts.gov, judiciary.uk) and `source_decision.mirror_url`.
+### Re-fetchability of the source decisions
+
+A benchmark about re-fetching has to be re-fetchable itself. In v0, 7 of the 13 `decision_url`
+values pointed at courtlistener.com, and for 6 of those `decision_url == mirror_url`, so there was
+no working fallback at all: courtlistener.com answers an automated fetch with **HTTP 202 and a
+zero-byte Cloudflare challenge**, and the v4 API answers 401. In v0.1 every `decision_url` was
+fetched and returned 200 on **2026-09-07**; the per-decision result is recorded in
+`source_decision.url_check`, and `www.courtlistener.com` — the bot-blocked web front end — is
+now `mirror_url` only. That is a statement about the front end, not about the operator: four
+decisions (Wilcox, Ibach, Shahid, Noland) still take their `decision_url` from
+`storage.courtlistener.com`, the Free Law Project object store, because the issuing court's own
+link has rotted. As of **2026-09-07** each of those four also carries a `fallback_url` served by a
+different operator, so no decision in v0.1 depends on a single operator any more.
+
+Where the issuing court's own link works, it *is* `decision_url`. Where it has rotted, the record
+says so rather than quietly substituting a copy:
+
+| Decision | `decision_url` (200) | `issuing_court_url` | `fallback_url` (200) |
+|---|---|---|---|
+| Lnu v. Blanche | cdn.ca9.uscourts.gov | 200 | — |
+| Scott v. Ill. Human Rights Comm'n | illinoiscourts.gov | 200 | — |
+| Barber v. Morawa | courts.michigan.gov | 200 | — |
+| Landberg v. City of New York | nycourts.gov | 200 | — |
+| Prososki v. Regan | nebraska.gov (`docId=N00013081PUB`) | 200 | storage.courtlistener.com |
+| Capital Standard v. U.S. Bank | flcourts-media.flcourts.gov | 200 | — |
+| R (Ayinde) v Haringey | judiciary.uk | 200 | — |
+| Zavadovsky v. Republic of Austria | ecf.dcd.uscourts.gov | 200 | — |
+| Deutsche Bank v. LeTennier | nycourts.gov | 200 | — |
+| **Wilcox v. Gingrich** | storage.courtlistener.com | public.courts.in.gov — **times out** | web.archive.org snapshot of public.courts.in.gov |
+| **Ibach v. Stewart** | storage.courtlistener.com | alappeals.gov — **403** | fingfx.thomsonreuters.com |
+| **Shahid v. Esaam** | storage.courtlistener.com | efast.gaappeals.us — **404** | web.archive.org snapshot of efast.gaappeals.us |
+| **Noland v. Land of the Free** | storage.courtlistener.com | courts.ca.gov — **404** | www4.courts.ca.gov/opinions/**archive**/ |
+
+`storage.courtlistener.com` is the object store, not the bot-blocked web front end, and it serves
+the same slip-opinion PDFs at 200. But one working URL from one operator is not re-fetchability,
+so the four decisions above were re-searched on **2026-09-07** for an independent third copy. Each
+copy below was fetched, returned **200** with `application/pdf`, and was verified by finding the
+case caption and docket number in the body along with citations the records quote:
+
+| Decision | Third copy (`fallback_url`) | Result |
+|---|---|---|
+| Wilcox v. Gingrich | `web.archive.org/web/20260315210643/https://public.courts.in.gov/Decisions/api/Document/Opinion?Id=C0b_…` | 200, 19 pp. — the Internet Archive's 2026-03-15 capture of the issuing court's *own* document endpoint, taken while it still answered |
+| Ibach v. Stewart | `fingfx.thomsonreuters.com/gfx/legaldocs/znvnmqrwqpl/Alabama Supreme Court - AI.pdf` | 200, 54 pp. — Reuters Legal's copy of the slip opinion |
+| Shahid v. Esaam | `web.archive.org/web/20250811111307/https://efast.gaappeals.us/download?filingId=79d42b0d…` | 200, 16 pp. — the Internet Archive's 2025-08-11 capture of the issuing court's own eFAST download, taken before the link rotted |
+| Noland v. Land of the Free | `www4.courts.ca.gov/opinions/archive/B331918.PDF` | 200, 32 pp. — the issuing court's own current path; California moves published opinions from `/opinions/documents/` to `/opinions/archive/`, which is why the recorded `issuing_court_url` 404s |
+
+Each of the four now stands on two independent operators: Free Law Project plus, respectively, the
+Internet Archive, Reuters, the Internet Archive, and — for Noland — the issuing court itself.
+(`mirror_url` does not add an operator; it is Free Law Project's own bot-blocked front end.) What
+was *not* found matters too: for all four, the aggregator
+copies — `law.justia.com`, `caselaw.findlaw.com`, `leagle.com`, `casemine.com` — answer **403** to
+an automated fetch even with a browser User-Agent, which is the same failure mode as
+`www.courtlistener.com` and is why none of them is recorded here. `public.courts.in.gov` refuses
+to connect at all (the whole host, not just the document path, re-tested at a 180-second timeout),
+and the Georgia Court of Appeals has since moved to `gaappeals.gov`, which answers **403** on
+every path including the same `filingId` — so for Wilcox and Shahid the Internet Archive capture
+is the only independent copy of the court's own document that a machine can still fetch.
+
+Three notes for anyone re-running these checks: nycourts.gov returns 403 to a default `curl`
+User-Agent and 200 to a browser one; `web.archive.org` was unreachable from this network during
+the earlier v0.1 pass and is reachable now, so a `fallback_url` on it should be re-checked rather
+than assumed; and four of thirteen issuing-court links have already rotted inside a year — which
+is the phenomenon this whole asset exists to make legible.
 
 ### How the corpus was found
 
@@ -173,7 +270,7 @@ The same block applies to the non-US equivalents:
 | Courts and Tribunals Judiciary (judiciary.uk) | `User-agent: *  Disallow:` (all permitted) — **fetched** |
 | CourtListener API + storage | public API, anonymous access permitted — **fetched** |
 
-So: **all 210 US records and 13 UK records came from sources that permit automated access.**
+So: **all 212 US records and 13 UK records came from sources that permit automated access.**
 Australian and Canadian decisions are documented in section 6 as the first extension target, with
 a manual retrieval path, because the hosts that carry them block this agent.
 
@@ -203,12 +300,21 @@ a manual retrieval path, because the hosts that carry them block this agent.
    they are unusually clean: correctly formatted, correctly pin-cited, squarely on point. Real
    filings contain harder negatives — slightly wrong pin cites, subsequent history omitted,
    authorities that support a proposition only partly. v1 should add a *hard control* class.
-7. **Five aggregate records** stand in for findings a court made in bulk without naming the
-   citations. They are flagged in `as_cited` and should be filtered out of per-citation scoring.
+7. **Six records are not scoreable per citation** — four `aggregate` (a court's bulk finding, no
+   individual citations named) and two `partial` (the *Shahid* Epps and Hodge citations, where the
+   court names the parties but never prints the citations). Both are flagged in
+   `citation_completeness` and prefixed in `as_cited`. Filter them out when scoring; use
+   `counts.scoreable_per_citation` = 219. *(v0's README said five aggregates; the file has always
+   held four.)*
 8. **Quotation fidelity.** `court_finding.quote` is transcribed from PDF text extraction. Curly
-   quotes, em-dashes and ellipses have been normalised; a few opinions use characters that the
-   extractor rendered imperfectly, and those passages were repaired by hand against the layout
-   text. Locators are the court's own (paragraph number, slip-op page, or reporter page).
+   quotes and ellipses have been normalised to the source's own forms where the extractor rendered
+   them imperfectly, and those passages were repaired by hand against the layout text. Locators
+   are the court's own (paragraph number, slip-op page, or reporter page).
+   **Dashes and spellings are not normalised.** A quote reproduces the codepoint the court used —
+   the Alabama opinion's `--`, the English judgment's `–` — and a citation reproduces the court's
+   own spelling of a party, including where it is wrong (the *Ayinde* judgment writes
+   "Kohls v Elison"; the corrected form lives in `what_actually_exists`, never in `as_cited`).
+   An asset that silently improves a court's text cannot be used to test whether anyone else does.
 9. **Chart-derived quotes.** The 20 records from *Prososki v. Regan* quote a two-column table.
    Their `court_finding.quote` is prefixed `Chart:` and reproduces the citation and the bullets
    printed beside it, joined with `•` — faithful to the table, but not a single contiguous run of
@@ -244,8 +350,12 @@ and reading them. Budget roughly 6–8 hours per 100 records.
    the court itself relied on. Take 3–6 per decision; that keeps the control ratio near 1:3 without
    extra reading. Prefer controls where the court quotes the authority — those exercise the SAYS
    check, not just EXISTS.
-6. **Rebuild.** `python work/finalize.py` regenerates `benchmark/citations-in-the-wild.v0.json`
-   and prints the counts. Bump `version` when the record count changes materially.
+6. **Rebuild.** `python work/finalize.py` regenerates
+   `benchmark/citations-in-the-wild.<VERSION>.json` and prints the counts. Give every new record
+   an explicit `id` continuing the sequence — `finalize.py` reads ids from the record files and
+   refuses duplicates, so an insertion never renumbers what is already published. Bump `VERSION`
+   in `finalize.py` and add a `CHANGELOG.md` entry when the record count or any published count
+   changes.
 
 **Two-column tables.** Any decision that presents its findings as a table needs the coordinate
 extraction used for Prososki, not `pdftotext`. The snippet is in this repo's history; the check is
@@ -282,10 +392,22 @@ simple — if a table's rows have unequal bullet counts, the reflow has scramble
 
 **Quality gates before merging a week's batch**
 
-- Every record has a non-empty `court_finding.quote` that is verbatim from the decision.
+- Every record has a non-empty `court_finding.quote` that is verbatim from the decision —
+  contiguous, unelided, and carrying the court's own dashes, quotation marks and spellings. A
+  bracketed elision inside a quote is a defect, not a tidy-up.
 - Every record has a `court_finding.locator` a reader can navigate to.
+- Every record has an `id`, unique across the whole corpus and never reused or reassigned.
+- Every `source_decision.decision_url` was fetched and returned 200, and the result is written to
+  `url_check` with the date. If the issuing court's own link failed, it stays in
+  `issuing_court_url` with its status — never deleted, never silently replaced.
 - `verdict_expected` is `EXISTS_FAIL` only where the court said the authority or its citation does
   not resolve — not merely that it was unhelpful.
+- A record is `fabricated` only if the court identified nothing behind the citation. If the
+  opinion names a real authority at the cited reference, or a real case of the same name, the
+  record is `wrong_citation`, whatever adjective the opinion used.
+- No record carries a bracketed placeholder in `as_cited` where the court printed a case style.
+  Placeholders are reserved for `aggregate` and `partial` records and must be flagged in
+  `citation_completeness`.
 - No two records share the same `(as_cited, quoted_text or cited_for, source_decision.case_name)`
   triple. The same authority legitimately appears twice in one decision when it was cited for two
   different false propositions — there are three such pairs in v0, all in *Capital Standard*.
