@@ -83,14 +83,19 @@ export const CONTEXT_MAX = 600;
 /**
  * The words around the citation, for the verifier to read the parties, the court and the year
  * from — the same read it gives a document's own text. A record that carries the text the filing
- * printed around the citation (`surrounding_text`) sends that; otherwise the case name and the
- * citation as cited, the name prefixed only when `as_cited` does not already open with it.
+ * printed around the citation (`surrounding_text`) sends that; otherwise the citation as cited,
+ * with the record's own spelling of the case name in front of it only when `as_cited` opens with
+ * the citation itself and so names nobody. A citation that already carries a caption is sent
+ * alone: prefixing the name would print the caption twice in two spellings, which is a string no
+ * filing prints, and the parties read back out of it would be neither.
  */
 export function contextOf(cited) {
   const own = typeof cited.surrounding_text === 'string' ? cited.surrounding_text.trim() : '';
   if (own) return own.slice(0, CONTEXT_MAX);
+  const as = String(cited.as_cited ?? '').trim();
   const name = typeof cited.case_name === 'string' ? cited.case_name.trim() : '';
-  const text = name && !cited.as_cited.startsWith(name) ? `${name}, ${cited.as_cited}` : cited.as_cited;
+  const capless = /^[\d[(]/.test(as);
+  const text = name && capless ? `${name}, ${as}` : as;
   return text.slice(0, CONTEXT_MAX);
 }
 
