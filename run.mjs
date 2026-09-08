@@ -27,7 +27,7 @@ function usage() {
     '',
     '  --api          Base URL of the EXHIBIT B verification API (required unless --mock).',
     '  --token        Bearer token for Authorization header (required unless --mock).',
-    '  --limit        Only score the first N records (after dropping aggregate/partial ones).',
+    '  --limit        Only score the first N records (after dropping the ones this run cannot score).',
     '  --budget-usd   Stop submitting further batches once cumulative cost_usd would exceed this.',
     '  --mock         Fabricate plausible verdicts instead of calling the API (no network).',
     '  --out          Output directory. Defaults to runs/<today, YYYY-MM-DD>.',
@@ -287,10 +287,10 @@ export async function run(args, retryOptions = {}) {
     const resultById = new Map((response.results ?? []).map((r) => [r.id, r]));
     for (const { record } of batchEntries) {
       const apiResult = resultById.get(record.id);
-      const hasQuote = record.cited_authority?.quoted_text != null;
       const existsVerdict = apiResult?.exists?.verdict ?? null;
       const saysVerdict = apiResult?.says?.verdict ?? null;
-      const { predicted, correct } = scoreResult(record.verdict_expected, existsVerdict, saysVerdict, hasQuote);
+      // Scored against the checks this record declares, and no others — see lib/score.mjs.
+      const { predicted, correct } = scoreResult(record.verdict_expected, existsVerdict, saysVerdict, record.checks_expected);
       const row = {
         id: record.id,
         expected: record.verdict_expected,
