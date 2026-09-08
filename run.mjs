@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-// Citations in the Wild — runner. Reads benchmark/citations-in-the-wild.v0.json, submits each
-// non-aggregate record to EXHIBIT B's verification API in batches of 25, scores the responses
+// Citations in the Wild — runner. Reads the newest benchmark/citations-in-the-wild.v*.json,
+// submits each per-citation scoreable record to EXHIBIT B's verification API in batches of 25, scores the responses
 // against the benchmark's gold verdicts (lib/score.mjs), and writes runs/<date>/{results.jsonl,
 // metrics.json, receipts/*.json}. See README.md "How to run" for the CLI contract.
 //
@@ -10,7 +10,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { setTimeout as sleep } from 'node:timers/promises';
 
-import { scoreResult, computeMetrics, dropAggregates } from './lib/score.mjs';
+import { scoreResult, computeMetrics, dropUnscoreable } from './lib/score.mjs';
+import { resolveDatasetPath } from './lib/dataset.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -26,7 +27,7 @@ function usage() {
     '',
     '  --api          Base URL of the EXHIBIT B verification API (required unless --mock).',
     '  --token        Bearer token for Authorization header (required unless --mock).',
-    '  --limit        Only score the first N records (after dropping aggregates).',
+    '  --limit        Only score the first N records (after dropping aggregate/partial ones).',
     '  --budget-usd   Stop submitting further batches once cumulative cost_usd would exceed this.',
     '  --mock         Fabricate plausible verdicts instead of calling the API (no network).',
     '  --out          Output directory. Defaults to runs/<today, YYYY-MM-DD>.',
@@ -214,9 +215,9 @@ function todayUtc() {
 }
 
 export async function run(args, retryOptions = {}) {
-  const benchmarkPath = path.join(__dirname, 'benchmark', 'citations-in-the-wild.v0.json');
+  const benchmarkPath = resolveDatasetPath(__dirname);
   const data = JSON.parse(fs.readFileSync(benchmarkPath, 'utf8'));
-  const kept = dropAggregates(data.records);
+  const kept = dropUnscoreable(data.records);
   const records = args.limit === null ? kept : kept.slice(0, args.limit);
 
   const date = todayUtc();

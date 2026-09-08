@@ -83,8 +83,10 @@ When the new work/records/*.json files are ready, rebuild the benchmark:
 
   ${python} work/finalize.py
 
-That regenerates benchmark/citations-in-the-wild.v0.json and prints the new counts. Bump
-"version" in the output if the record count changed materially, then commit.
+That regenerates the current benchmark/citations-in-the-wild.vN.json (VERSION in finalize.py)
+and prints the new counts. Every record needs its own frozen "id" (CITW-NNNN, next after the
+highest one in work/records/); finalize.py refuses duplicates. Bump VERSION when a batch changes
+the record set, then commit.
 `);
 }
 
