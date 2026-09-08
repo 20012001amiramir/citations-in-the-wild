@@ -77,6 +77,23 @@ export function parseArgs(argv) {
   return args;
 }
 
+/** The most context characters the verification API accepts on a claim. */
+export const CONTEXT_MAX = 600;
+
+/**
+ * The words around the citation, for the verifier to read the parties, the court and the year
+ * from — the same read it gives a document's own text. A record that carries the text the filing
+ * printed around the citation (`surrounding_text`) sends that; otherwise the case name and the
+ * citation as cited, the name prefixed only when `as_cited` does not already open with it.
+ */
+export function contextOf(cited) {
+  const own = typeof cited.surrounding_text === 'string' ? cited.surrounding_text.trim() : '';
+  if (own) return own.slice(0, CONTEXT_MAX);
+  const name = typeof cited.case_name === 'string' ? cited.case_name.trim() : '';
+  const text = name && !cited.as_cited.startsWith(name) ? `${name}, ${cited.as_cited}` : cited.as_cited;
+  return text.slice(0, CONTEXT_MAX);
+}
+
 /** Maps one benchmark record onto the claim shape the verification API expects. */
 export function toClaim(record) {
   return {
@@ -84,6 +101,7 @@ export function toClaim(record) {
     locator: { type: 'case', value: record.cited_authority.as_cited },
     quote: record.cited_authority.quoted_text ?? null,
     claim: record.cited_authority.cited_for ?? record.cited_authority.as_cited,
+    context: contextOf(record.cited_authority),
   };
 }
 

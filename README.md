@@ -76,7 +76,11 @@ node run.mjs --api https://exhibitb.autofract.com --token $INTERNAL_TOKEN --budg
 node scripts/leaderboard.mjs
 ```
 
-`run.mjs` reads the benchmark, drops the aggregate records, maps each remaining record to a claim,
+`run.mjs` reads the benchmark, drops the aggregate records, maps each remaining record to a claim
+— `as_cited` as the case locator, the quote, the proposition, and a `context` of at most 600
+characters: the case name and the citation as the filing printed them (or the record's own
+`surrounding_text` when it carries one), which is what the verifier reads the parties, the court
+and the year from, exactly as it reads a document's own words around a citation —
 and POSTs batches of 25 to `{api}/api/internal/verify` (`Authorization: Bearer <token>`) until
 either every record is scored or cumulative `cost_usd` would exceed `--budget-usd` (the run is then
 marked `partial: true` and stops — it does not submit further batches once over budget). A batch
