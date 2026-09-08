@@ -2,6 +2,89 @@
 
 *Benchmark entries only. The same review pass also revised four launch dossiers that live outside this repository, which is why the issue numbers below are not contiguous.*
 
+## v0.2 — 2026-09-08
+
+Fixes a defect in the benchmark's own design, found by the first live run against the verification
+API. Every record in v0 and v0.1 declared both checks, `EXISTS` and `SAYS`. Only 76 of the 225
+carry a verbatim `cited_authority.quoted_text`; the other 149 asked for a check with nothing for it
+to read. A verifier that resolved a control and then correctly declined to run `SAYS` on it was
+scored `INSUFFICIENT` for doing the right thing, and no record in the file could be predicted
+`PASS` at all. The records were right. The declaration was wrong, and it is the declaration that
+changed.
+
+**Benchmark:** `benchmark/citations-in-the-wild.v0.1.json` → `benchmark/citations-in-the-wild.v0.2.json`
+(225 records, unchanged). v0 and v0.1 stay as published, side by side; `lib/dataset.mjs` resolves
+the newest by version number.
+
+### What the run showed
+
+`runs/2026-09-08/`, engine 0.2.0, 219 records submitted under the v0.1 denominator:
+
+| | v0.1 rules |
+|---|---|
+| `PASS` class precision / recall | **0 / 0** — not one record could be predicted `PASS` |
+| `EXISTS` precision / recall | 1.0 / 0.284 (21 `NOT_FOUND`, every one of them a citation a court had ruled does not resolve) |
+| `says.match_rate` | 0 |
+| insufficient share | **0.881** (193 of 219) |
+
+193 of those 219 records produced no answer, and 149 of them could not have produced one: 116 rows
+were `INSUFFICIENT` purely because a check the record had no material for did not run.
+
+### What changed
+
+| # | Change | Detail | File |
+|---|---|---|---|
+| 1 | `checks_expected` stops being a constant | Was `{ "EXISTS": …, "SAYS": … }` on every record — a restatement of `verdict_expected`. Now an array naming the checks the record's own material supports: `["EXISTS","SAYS"]` where a quote is on the record (**76**), `["EXISTS"]` where none is and the question is whether the citation resolves (**125**), `["EXISTS","HOLDS"]` where the court found the authority does not hold what it was cited for but printed no quote to check that against (**24**) | `work/finalize.py` → `benchmark/citations-in-the-wild.v0.2.json` |
+| 2 | The field is derived, never written per record | `declared_checks(verdict, quoted_text)` reads it off the record. `finalize.py` then asserts the derivation over every record — `EXISTS` first, `SAYS` declared exactly where a quote is, `HOLDS` declared exactly for a says-layer failure with no printed quote — instead of asserting a hand-counted total that would rot the moment the corpus grows. The v0.2 group counts are frozen behind a record-count guard, so the weekly +100 recipe still runs | `work/finalize.py` |
+| 3 | A second denominator | `counts.scoreable_exists_says` = **197**: the 219 `full` records less the 22 whose only remaining check is `HOLDS`. `counts.scoreable_per_citation` = 219 is unchanged and still means what it did. Both are explained in `benchmark/README.md` § 1 | `work/finalize.py`, `benchmark/README.md`, `README.md` |
+| 4 | The scorer predicts against what the record declares | `PASS` when every declared check passed, `EXISTS_FAIL` / `SAYS_FAIL` when the matching check failed, `INSUFFICIENT` when a declared check could not run. A record declaring `["EXISTS"]` is a `PASS` on a resolve alone, and a `SAYS` verdict of `NOT_RUN` on it changes nothing; a record declaring `["EXISTS","SAYS"]` still needs `SAYS`, and an unrun one is still `INSUFFICIENT` | `lib/score.mjs` |
+| 5 | `dropUnscoreable` drops the `HOLDS` records too | A run of two checks is not scored on a question it cannot ask. 225 → 197 submitted, where v0.1 submitted 219 | `lib/score.mjs`, `run.mjs` |
+| 6 | Older files go on scoring as they did | `declaredChecks` reads the v0/v0.1 object, the old `hasQuote` boolean and a missing argument all back as `EXISTS` + `SAYS`, which is what each of them meant. A v0-shaped record is scored today exactly as it was yesterday | `lib/score.mjs` |
+| 7 | New coverage | 27-row table over every EXISTS and SAYS verdict against all three declared sets, the older shapes, and the dataset partition | `lib/cli.test.mjs` |
+| 8 | `finalize.py` writes LF | So the file it writes is the file that is committed on any platform, and a second run reproduces the published file byte for byte rather than only after git's normalisation | `work/finalize.py` |
+
+### What did not change
+
+**No id, quote, verdict, finding, court finding or source decision.** Field by field, the only
+difference between a v0.1 record and its v0.2 counterpart is `checks_expected`; the two files'
+`source_decisions` blocks are identical, and every `counts` value carried over from v0.1 is
+unchanged. This release is metadata about what each record can be asked, not a change to what any
+record says. The record set is the same 225 ids, in the same order.
+
+### The same run, re-scored under the new rules
+
+The raw `EXISTS`/`SAYS` verdicts of `runs/2026-09-08/` are what they were; only the mapping and the
+denominator change. The published `runs/2026-09-08/` files are left as they were recorded.
+
+| | v0.1 rules | v0.2 rules |
+|---|---|---|
+| records submitted | 219 | 197 |
+| scored | 26 | **62** |
+| insufficient share | 0.881 | **0.685** |
+| `PASS` p / r / F1 | 0 / 0 / 0 | **0.806 / 1.0 / 0.892** |
+| `EXISTS_FAIL` p / r / F1 | 1.0 / 1.0 / 1.0 | 1.0 / **0.75** / 0.857 |
+| `SAYS_FAIL` p / r / F1 | 1.0 / 1.0 / 1.0 | 1.0 / 1.0 / 1.0 |
+| `exists` precision / recall | 1.0 / 0.284 | 1.0 / 0.284 |
+| `says.match_rate` | 0 | **0.414** |
+| balanced accuracy | 0.667 | 0.917 |
+
+`EXISTS_FAIL` recall falling from 1.0 to 0.75 is the point of the exercise, not a regression: seven
+citations that a court ruled do not resolve came back `RESOLVED` and are now counted as the wrong
+answers they are. Under the v0.1 rules all seven were hidden inside `INSUFFICIENT`, which is how a
+perfect 1.0 sat next to a run that answered 26 of 219 records.
+
+### Verification run after the changes
+
+- `benchmark/citations-in-the-wild.v0.2.json` parses. 225 records; **0** duplicate ids; every
+  record's `checks_expected` reproduced by the derivation; group counts 125 / 76 / 24;
+  `scoreable_per_citation` 219, `scoreable_exists_says` 197.
+- `python work/finalize.py` run twice: identical bytes both times, and identical to the committed
+  file.
+- `node --test lib/cli.test.mjs`: 61 tests, 0 failures. `node run.mjs --mock` and
+  `node scripts/leaderboard.mjs` both clean.
+
+---
+
 ## v0.1 — 2026-09-07
 
 Applies all 21 issues raised in `AUDIT-v0.json`. Every fix was grounded by re-reading the primary

@@ -1,14 +1,14 @@
 > This file documents the dataset only. For what this repo is, how to run the benchmark, and
 > licensing, see [`../README.md`](../README.md).
 
-# Citations in the Wild — v0.1
+# Citations in the Wild — v0.2
 
 A seed benchmark of citations that courts have themselves ruled on: 155 offending citations a
 court found fabricated, misquoted or misrepresented, and 70 control citations from the same
 decisions that the court relied on and that say what they are cited for.
 
-**File:** `citations-in-the-wild.v0.1.json` (225 records, 13 source decisions, 12 jurisdictions)
-**Changes since v0:** `../CHANGELOG.md`
+**File:** `citations-in-the-wild.v0.2.json` (225 records, 13 source decisions, 12 jurisdictions)
+**Changes since v0 and v0.1:** `../CHANGELOG.md`
 
 | | count |
 |---|---|
@@ -19,6 +19,7 @@ decisions that the court relied on and that say what they are cited for.
 | `SAYS_FAIL` | 77 |
 | `PASS` | 70 |
 | Scoreable per citation | 219 |
+| Scoreable on EXISTS/SAYS | 197 |
 | Source decisions | 13 |
 
 Findings among offending records: `misrepresented` 42, `fabricated` 41, `wrong_citation` 37,
@@ -43,7 +44,7 @@ One record = one citation, as it appeared in a filing, plus the court's own verb
   "id": "CITW-0001",
   "record_type": "offending",          // or "control"
   "verdict_expected": "EXISTS_FAIL",   // EXISTS_FAIL | SAYS_FAIL | PASS
-  "checks_expected": { "EXISTS": "FAIL", "SAYS": "NOT_REACHED" },
+  "checks_expected": ["EXISTS"],       // what this record's material supports — see § 1
   "finding": "fabricated",
   "authority_type": "case",            // case | statute | court_rule
   "citation_completeness": "full",     // full | partial | aggregate — see § 1
@@ -97,6 +98,37 @@ citation string handed to the verifier does not resolve to it. That is the failu
 re-fetching system actually encounters. The split between `fabricated` and `wrong_citation` is a
 statement about what the court found *behind* the citation, never about the verdict.
 
+### Declared checks
+
+`checks_expected` lists the checks a record's own material supports. It is derived from that
+material, never written per record, and it is not a restatement of the verdict. A verifier is
+scored on the checks a record declares and on no others: `PASS` when every declared check passed,
+`EXISTS_FAIL` or `SAYS_FAIL` when the matching check failed, `INSUFFICIENT` when a declared check
+could not run. Across the 225 records:
+
+- **`["EXISTS"]`** (125 records) — no quote is on the record, so there is nothing for SAYS to
+  compare and nothing is asked of it. A resolve is the whole question. The 70 controls are here,
+  together with 55 offending records whose failure is that the citation does not resolve at all.
+- **`["EXISTS","SAYS"]`** (76 records) — `cited_authority.quoted_text` carries the words the filing
+  put in the authority's mouth. Both checks are answerable, so both are asked.
+- **`["EXISTS","HOLDS"]`** (24 records) — the court found the authority does not hold what it was
+  cited for, and printed no quote to check that against. HOLDS is a judgement about a proposition
+  rather than a comparison of strings, and an EXISTS/SAYS run cannot make it.
+
+Two denominators follow from this, and they are not the same number:
+
+- **`counts.scoreable_per_citation`** (219) — the records that name a citation of their own, which
+  is everything except the `aggregate` and `partial` records described next. Use it for any score
+  computed citation by citation.
+- **`counts.scoreable_exists_says`** (197) — that set less the 22 `full` records whose only
+  remaining check is HOLDS. Use it for a run of EXISTS and SAYS; it is what `lib/score.mjs`'s
+  `dropUnscoreable` keeps.
+
+v0 and v0.1 declared EXISTS and SAYS on every record, including the 149 carrying no quote. A
+verifier that resolved a control and then — correctly — never ran SAYS on it was scored
+`INSUFFICIENT`, so no record in the file could be predicted `PASS` at all. What was wrong was the
+declaration, not the records: no id, quote, verdict or finding changed in v0.2.
+
 ### Citation completeness
 
 `citation_completeness` says whether the record carries something a verifier can actually run:
@@ -111,7 +143,8 @@ statement about what the court found *behind* the citation, never about the verd
   that case and belong in the corpus; they are flagged with the `[Partial citation]` prefix.
 
 Exclude `aggregate` and `partial` when scoring a verifier per citation — `counts.scoreable_per_citation`
-is the denominator to use.
+is the denominator to use. For a run of EXISTS and SAYS specifically, exclude the `["EXISTS","HOLDS"]`
+records as well and use `counts.scoreable_exists_says`.
 
 ---
 
@@ -300,11 +333,14 @@ a manual retrieval path, because the hosts that carry them block this agent.
    they are unusually clean: correctly formatted, correctly pin-cited, squarely on point. Real
    filings contain harder negatives — slightly wrong pin cites, subsequent history omitted,
    authorities that support a proposition only partly. v1 should add a *hard control* class.
-7. **Six records are not scoreable per citation** — four `aggregate` (a court's bulk finding, no
-   individual citations named) and two `partial` (the *Shahid* Epps and Hodge citations, where the
-   court names the parties but never prints the citations). Both are flagged in
-   `citation_completeness` and prefixed in `as_cited`. Filter them out when scoring; use
-   `counts.scoreable_per_citation` = 219. *(v0's README said five aggregates; the file has always
+7. **Six records are not scoreable per citation, and 22 more are not scoreable on EXISTS/SAYS** —
+   four `aggregate` (a court's bulk finding, no individual citations named) and two `partial` (the
+   *Shahid* Epps and Hodge citations, where the court names the parties but never prints the
+   citations); both are flagged in `citation_completeness` and prefixed in `as_cited`. Filter them
+   out when scoring and use `counts.scoreable_per_citation` = 219. On top of that, 22 `full`
+   records declare `["EXISTS","HOLDS"]` — the court found a says-layer failure without printing a
+   quote — which an EXISTS/SAYS run cannot answer either way; for such a run use
+   `counts.scoreable_exists_says` = 197. *(v0's README said five aggregates; the file has always
    held four.)*
 8. **Quotation fidelity.** `court_finding.quote` is transcribed from PDF text extraction. Curly
    quotes and ellipses have been normalised to the source's own forms where the extractor rendered
@@ -408,6 +444,10 @@ simple — if a table's rows have unequal bullet counts, the reflow has scramble
 - No record carries a bracketed placeholder in `as_cited` where the court printed a case style.
   Placeholders are reserved for `aggregate` and `partial` records and must be flagged in
   `citation_completeness`.
+- `quoted_text` holds the filing's quote where the court printed one, and `null` where it did not.
+  Never a paraphrase, and never the court's own words about the citation — `checks_expected` is
+  derived from this field, so a quote invented to fill it declares a SAYS check with nothing
+  behind it, which is the defect v0.2 fixed.
 - No two records share the same `(as_cited, quoted_text or cited_for, source_decision.case_name)`
   triple. The same authority legitimately appears twice in one decision when it was cited for two
   different false propositions — there are three such pairs in v0, all in *Capital Standard*.

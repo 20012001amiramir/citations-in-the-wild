@@ -19,7 +19,8 @@ This repo is that dataset (`benchmark/`), the pipeline that built it (`work/`), 
 ## What's in it
 
 ```
-benchmark/citations-in-the-wild.v0.1.json the dataset: 225 records, 13 source decisions
+benchmark/citations-in-the-wild.v0.2.json the dataset: 225 records, 13 source decisions
+benchmark/citations-in-the-wild.v0.1.json the v0.1 release, kept as published (CHANGELOG.md)
 benchmark/citations-in-the-wild.v0.json   the v0 release, kept as published (CHANGELOG.md)
 benchmark/README.md                       full schema, provenance, licence and known limits
 work/                                      the harvest -> fetch -> triage -> transcribe -> build
@@ -40,7 +41,9 @@ scripts/grow.mjs                           wraps the weekly +100-records recipe
 
 One record is one citation as it appeared in a real filing, plus the court's own verbatim finding
 about it: what was cited, what it was cited for, whether the authority resolves (`EXISTS`), and
-whether it says what it's quoted or cited as saying (`SAYS`). See
+whether it says what it's quoted as saying (`SAYS`). Each record also states, in
+`checks_expected`, which of those checks its own material supports — a record with no quote on it
+asks nothing of `SAYS`, and is scored on `EXISTS` alone. See
 [`benchmark/README.md`](benchmark/README.md) for the full field-by-field schema, provenance of all
 13 source decisions, and known limits — read it before using the dataset for anything beyond a
 quick look.
@@ -60,12 +63,19 @@ itself never uses the word.
 Not every record can be scored citation by citation. From v0.1 each record carries
 `citation_completeness`: `full` (the court printed a citation string a verifier can run against),
 `partial` (the court named the parties but never reproduced the citation — two Shahid records) or
-`aggregate` (a bulk finding such as "eighteen of forty-five citations..." — four records).
-`lib/score.mjs`'s `dropUnscoreable` keeps only `full`, which is the file's own
-`counts.scoreable_per_citation` (219 of 225). A record without the field is a v0 record, where the
-only exclusion is the literal `[Aggregate finding]` tag at the start of `cited_authority.as_cited`
-(`isAggregateRecord`, case-insensitive; 4 of 223). `CITW-0140` is deliberately kept under both
-rules: it is a single, fully itemised citation that merely lacked a case *name* in v0.
+`aggregate` (a bulk finding such as "eighteen of forty-five citations..." — four records). Only
+`full` records count towards `counts.scoreable_per_citation` (219 of 225). A record without the
+field is a v0 record, where the only exclusion is the literal `[Aggregate finding]` tag at the
+start of `cited_authority.as_cited` (`isAggregateRecord`, case-insensitive; 4 of 223).
+`CITW-0140` is deliberately kept under both rules: it is a single, fully itemised citation that
+merely lacked a case *name* in v0.
+
+From v0.2 a second, narrower denominator sits alongside it. 24 records declare
+`checks_expected: ["EXISTS","HOLDS"]` — the court found the cited authority does not hold what it
+was cited for, but printed no quote to check that against, which is a judgement about a
+proposition rather than a comparison of strings. A run of `EXISTS` and `SAYS` cannot answer those
+either way, so `lib/score.mjs`'s `dropUnscoreable` drops them along with the six above and keeps
+`counts.scoreable_exists_says` (197 of 225).
 
 ## How to run
 
@@ -76,7 +86,7 @@ node run.mjs --api https://exhibitb.autofract.com --token $INTERNAL_TOKEN --budg
 node scripts/leaderboard.mjs
 ```
 
-`run.mjs` reads the benchmark, drops the aggregate records, maps each remaining record to a claim
+`run.mjs` reads the benchmark, drops the records this run cannot score, maps each remaining record to a claim
 — `as_cited` as the case locator, the quote, the proposition, and a `context` of at most 600
 characters: the case name and the citation as the filing printed them (or the record's own
 `surrounding_text` when it carries one), which is what the verifier reads the parties, the court
@@ -92,7 +102,7 @@ Full flag list:
 ```
 --api <url>          base URL of the verification API (required unless --mock)
 --token <token>       bearer token (required unless --mock)
---limit N             only score the first N non-aggregate records
+--limit N             only score the first N of the records this run can score
 --budget-usd N        stop once cumulative cost would exceed this
 --mock                fabricate plausible verdicts locally — no network, no token needed
 --out DIR             output directory (default: runs/<today, YYYY-MM-DD>)
@@ -118,7 +128,16 @@ verification API is live.
 
 `lib/score.mjs` maps the raw `EXISTS`/`SAYS` verdicts onto one of four predicted labels
 (`INSUFFICIENT`, `EXISTS_FAIL`, `SAYS_FAIL`, `PASS`) and aggregates per-record results into
-`metrics.json`:
+`metrics.json`.
+
+A record is scored against the checks it declares in `checks_expected` and against no others:
+`PASS` when every declared check passed, `EXISTS_FAIL` or `SAYS_FAIL` when the matching check
+failed, `INSUFFICIENT` when a declared check could not run. So a record with no quote on it is a
+`PASS` on a resolve alone, while a record that does carry one still needs a `SAYS` verdict — an
+unrun `SAYS` there is `INSUFFICIENT`, because a check that did not run has shown nothing. Records
+from v0 and v0.1, which declared both checks on every record, score exactly as they did.
+
+The aggregate:
 
 - Per-class precision/recall/F1 for `EXISTS_FAIL` / `SAYS_FAIL` / `PASS`, computed only over
   records that got a scoreable prediction (an `INSUFFICIENT` or `ERROR` prediction is excluded from
