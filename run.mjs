@@ -257,6 +257,37 @@ export async function run(args, retryOptions = {}) {
   let partial = false;
   let engine;
 
+  // Every batch's rows land on disk as soon as they are scored, and the metrics are rewritten with
+  // them. A nightly run against a live registry is an hour of polite waiting, and a run killed by
+  // its own deadline used to leave nothing behind at all: an hour of real answers thrown away
+  // because the last line never ran.
+  let flushed = 0;
+  const resultsPath = path.join(outDir, 'results.jsonl');
+  fs.writeFileSync(resultsPath, '');
+  const flush = () => {
+    const rows = resultLines.slice(flushed);
+    if (rows.length) fs.appendFileSync(resultsPath, rows.map((r) => JSON.stringify(r)).join('\n') + '\n');
+    flushed = resultLines.length;
+  };
+  const writeMetrics = (done) =>
+    fs.writeFileSync(
+      path.join(outDir, 'metrics.json'),
+      `${JSON.stringify(computeMetrics(scored, { date, partial: partial || !done, costUsd: cumulativeCost, engine }), null, 2)}\n`,
+    );
+  // Killed rather than finished: what was measured is written up as a partial run, so the directory
+  // holds a readable result instead of a date.
+  const onSignal = () => {
+    partial = true;
+    try {
+      flush();
+      writeMetrics(false);
+    } finally {
+      process.exit(1);
+    }
+  };
+  process.once('SIGTERM', onSignal);
+  process.once('SIGINT', onSignal);
+
   for (let i = 0; i < batches.length; i++) {
     const batchEntries = batches[i];
     const response = await postBatchWithRetry(args, batchEntries, i, retryOptions);
@@ -274,6 +305,8 @@ export async function run(args, retryOptions = {}) {
         resultLines.push(row);
         scored.push({ expected: row.expected, predicted: row.predicted });
       }
+      flush();
+      writeMetrics(false);
       continue;
     }
 
@@ -303,6 +336,9 @@ export async function run(args, retryOptions = {}) {
       scored.push({ expected: row.expected, predicted: row.predicted });
     }
 
+    flush();
+    writeMetrics(false);
+
     const hasMoreBatches = i < batches.length - 1;
     if (cumulativeCost > args.budgetUsd && hasMoreBatches) {
       partial = true;
@@ -310,10 +346,9 @@ export async function run(args, retryOptions = {}) {
     }
   }
 
-  fs.writeFileSync(
-    path.join(outDir, 'results.jsonl'),
-    resultLines.map((r) => JSON.stringify(r)).join('\n') + (resultLines.length ? '\n' : ''),
-  );
+  flush();
+  process.off('SIGTERM', onSignal);
+  process.off('SIGINT', onSignal);
 
   const metrics = computeMetrics(scored, { date, partial, costUsd: cumulativeCost, engine });
   fs.writeFileSync(path.join(outDir, 'metrics.json'), `${JSON.stringify(metrics, null, 2)}\n`);
