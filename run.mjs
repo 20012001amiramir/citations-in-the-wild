@@ -15,7 +15,16 @@ import { resolveDatasetPath } from './lib/dataset.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const BATCH_SIZE = 25;
+// Ten, not twenty-five. A batch is one HTTP request the service answers only when every claim in it
+// is done, and a legal citation now costs the registry's politeness as well as a fetch: twenty-five
+// of them ran past the client's own five-minute ceiling on 2026-09-09, so every batch failed three
+// times over and a hundred citations came back as errors. Ten leaves room, and a batch that does
+// fail costs ten rows rather than twenty-five.
+export const BATCH_SIZE = 10;
+/** How long one batch may take. Generous on purpose: the service is doing real work — fetching
+ *  sources, waiting out a registry's rate limit — and the honest failure is "this took too long",
+ *  not a client library's undocumented default. */
+const BATCH_TIMEOUT_MS = 15 * 60_000;
 const MAX_ATTEMPTS = 3; // 1 initial attempt + 2 retries
 const RETRY_BASE_MS = 300;
 
@@ -189,6 +198,7 @@ export async function realVerify(args, claims) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ claims, says: 'all', archive: false, holds: { ids: [] } }),
+      signal: AbortSignal.timeout(args.batchTimeoutMs ?? BATCH_TIMEOUT_MS),
     });
   } catch (err) {
     // Network-level failure (DNS, connection refused, timeout, ...) — retryable.
