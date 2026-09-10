@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { setTimeout as sleep } from 'node:timers/promises';
 
-import { scoreResult, computeMetrics, dropUnscoreable } from './lib/score.mjs';
+import { scoreResult, computeMetrics, dropUnscoreable, registryMethodOf } from './lib/score.mjs';
 import { resolveDatasetPath } from './lib/dataset.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -359,11 +359,13 @@ export async function run(args, retryOptions = {}) {
         id: record.id,
         expected: record.verdict_expected,
         exists_verdict: existsVerdict,
-        // Which way the registry was asked. The exact lookup is rationed at 125 a day, so a run
+        // Which way the registry answered. The exact lookup is rationed at 125 a day, so a run
         // longer than that answers the rest through the open search — and the two are not equally
         // precise, the search being the one that can settle on a caption that merely shares a
         // surname. A figure that blended them without saying so would be a figure about nothing.
-        registry_method: apiResult?.exists?.registry?.method ?? null,
+        // A citation the registry never answered about is null here, whatever way it would have
+        // been asked (lib/score.mjs registryMethodOf).
+        registry_method: registryMethodOf(apiResult),
         says_verdict: saysVerdict,
         predicted,
         correct,
