@@ -328,12 +328,13 @@ export async function run(args, retryOptions = {}) {
           id: record.id,
           expected: record.verdict_expected,
           exists_verdict: null,
+          registry_method: null,
           says_verdict: null,
           predicted: 'ERROR',
           correct: false,
         };
         resultLines.push(row);
-        scored.push({ expected: row.expected, predicted: row.predicted });
+        scored.push({ expected: row.expected, predicted: row.predicted, registry_method: row.registry_method });
       }
       flush();
       writeMetrics(false);
@@ -358,12 +359,17 @@ export async function run(args, retryOptions = {}) {
         id: record.id,
         expected: record.verdict_expected,
         exists_verdict: existsVerdict,
+        // Which way the registry was asked. The exact lookup is rationed at 125 a day, so a run
+        // longer than that answers the rest through the open search — and the two are not equally
+        // precise, the search being the one that can settle on a caption that merely shares a
+        // surname. A figure that blended them without saying so would be a figure about nothing.
+        registry_method: apiResult?.exists?.registry?.method ?? null,
         says_verdict: saysVerdict,
         predicted,
         correct,
       };
       resultLines.push(row);
-      scored.push({ expected: row.expected, predicted: row.predicted });
+      scored.push({ expected: row.expected, predicted: row.predicted, registry_method: row.registry_method });
     }
 
     flush();
