@@ -29,7 +29,18 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // So the batch is sized to finish well inside both, and the client's own deadline is set *below*
 // the server's. That ordering is the point: whoever gives up first writes the error, and a client
 // that outwaits its server turns a slow answer into an unexplained broken pipe.
-export const BATCH_SIZE = 4;
+//
+// Two, and the number is measured rather than chosen. Without a credential a batch of ten ran in
+// 2m14s; with one it ran 7m53s, because the engine can now fetch the opinion's own text and that
+// is where the time goes. Four was still over the line — a batch of four had not come back after
+// nine minutes. Two leaves better than twice the room at the observed rate.
+//
+// Sizing down matters more than it looks, because an abandoned request is not a cancelled one: the
+// service goes on working after the client gives up, and the client's retry arrives on top of work
+// still in flight. A batch that overruns does not fail once, it multiplies. The fix for that is an
+// endpoint that answers immediately and is polled — the customer path already works that way — and
+// until then the batch simply has to be small enough never to overrun.
+export const BATCH_SIZE = 2;
 /** How long one batch may take, from the client. Four minutes, deliberately under Node's default
  *  300 s `requestTimeout` on the other end: a batch that overruns should be reported by the side
  *  that can say what it was waiting for. */
