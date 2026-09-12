@@ -359,8 +359,9 @@ export async function run(args, retryOptions = {}) {
         id: record.id,
         expected: record.verdict_expected,
         exists_verdict: existsVerdict,
-        // Which way the registry answered. The exact lookup is rationed at 125 a day, so a run
-        // longer than that answers the rest through the open search — and the two are not equally
+        // Which way the registry answered. The exact lookup is metered — measured at 125 a day and
+        // at 50 an hour, whichever binds first — so a run longer than the allowance answers the
+        // rest through the open search, and the two are not equally
         // precise, the search being the one that can settle on a caption that merely shares a
         // surname. A figure that blended them without saying so would be a figure about nothing.
         // A citation the registry never answered about is null here, whatever way it would have
