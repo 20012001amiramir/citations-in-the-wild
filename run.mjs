@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { setTimeout as sleep } from 'node:timers/promises';
 
-import { scoreResult, computeMetrics, dropUnscoreable, registryMethodOf, registryReasonOf } from './lib/score.mjs';
+import { scoreResult, computeMetrics, dropUnscoreable, registryMethodOf, registryReasonOf, registryStatusOf } from './lib/score.mjs';
 import { resolveDatasetPath } from './lib/dataset.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -330,12 +330,13 @@ export async function run(args, retryOptions = {}) {
           exists_verdict: null,
           registry_method: null,
           registry_reason: null,
+          registry_status: null,
           says_verdict: null,
           predicted: 'ERROR',
           correct: false,
         };
         resultLines.push(row);
-        scored.push({ expected: row.expected, predicted: row.predicted, registry_method: row.registry_method, exists_verdict: row.exists_verdict, registry_reason: row.registry_reason });
+        scored.push({ expected: row.expected, predicted: row.predicted, registry_method: row.registry_method, exists_verdict: row.exists_verdict, registry_reason: row.registry_reason, registry_status: row.registry_status });
       }
       flush();
       writeMetrics(false);
@@ -371,12 +372,14 @@ export async function run(args, retryOptions = {}) {
         // And what it gave as the reason, where the status alone does not say: the difference
         // between a volume the registry has not ingested and a citation nothing prints.
         registry_reason: registryReasonOf(apiResult),
+        // And the status beside it: a registry that refused us is not a registry that has nothing.
+        registry_status: registryStatusOf(apiResult),
         says_verdict: saysVerdict,
         predicted,
         correct,
       };
       resultLines.push(row);
-      scored.push({ expected: row.expected, predicted: row.predicted, registry_method: row.registry_method, exists_verdict: row.exists_verdict, registry_reason: row.registry_reason });
+      scored.push({ expected: row.expected, predicted: row.predicted, registry_method: row.registry_method, exists_verdict: row.exists_verdict, registry_reason: row.registry_reason , registry_status: row.registry_status });
     }
 
     flush();
