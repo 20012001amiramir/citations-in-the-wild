@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { setTimeout as sleep } from 'node:timers/promises';
 
-import { scoreResult, computeMetrics, dropUnscoreable, registryMethodOf } from './lib/score.mjs';
+import { scoreResult, computeMetrics, dropUnscoreable, registryMethodOf, registryReasonOf } from './lib/score.mjs';
 import { resolveDatasetPath } from './lib/dataset.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -329,12 +329,13 @@ export async function run(args, retryOptions = {}) {
           expected: record.verdict_expected,
           exists_verdict: null,
           registry_method: null,
+          registry_reason: null,
           says_verdict: null,
           predicted: 'ERROR',
           correct: false,
         };
         resultLines.push(row);
-        scored.push({ expected: row.expected, predicted: row.predicted, registry_method: row.registry_method });
+        scored.push({ expected: row.expected, predicted: row.predicted, registry_method: row.registry_method, exists_verdict: row.exists_verdict, registry_reason: row.registry_reason });
       }
       flush();
       writeMetrics(false);
@@ -367,12 +368,15 @@ export async function run(args, retryOptions = {}) {
         // A citation the registry never answered about is null here, whatever way it would have
         // been asked (lib/score.mjs registryMethodOf).
         registry_method: registryMethodOf(apiResult),
+        // And what it gave as the reason, where the status alone does not say: the difference
+        // between a volume the registry has not ingested and a citation nothing prints.
+        registry_reason: registryReasonOf(apiResult),
         says_verdict: saysVerdict,
         predicted,
         correct,
       };
       resultLines.push(row);
-      scored.push({ expected: row.expected, predicted: row.predicted, registry_method: row.registry_method });
+      scored.push({ expected: row.expected, predicted: row.predicted, registry_method: row.registry_method, exists_verdict: row.exists_verdict, registry_reason: row.registry_reason });
     }
 
     flush();
