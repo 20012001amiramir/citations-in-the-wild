@@ -109,6 +109,9 @@ export function parseArgs(argv) {
 /** The most context characters the verification API accepts on a claim. */
 export const CONTEXT_MAX = 600;
 
+/** A four-digit year as a filing prints one. */
+const YEAR_RE = /\b(?:1[89]|20)\d{2}\b/;
+
 /**
  * The words around the citation, for the verifier to read the parties, the court and the year
  * from — the same read it gives a document's own text. A record that carries the text the filing
@@ -125,7 +128,16 @@ export function contextOf(cited) {
   const name = typeof cited.case_name === 'string' ? cited.case_name.trim() : '';
   const capless = /^[\d[(]/.test(as);
   const text = name && capless ? `${name}, ${as}` : as;
-  return text.slice(0, CONTEXT_MAX);
+  // A filing prints the court and the year in a parenthetical after the citation. The record keeps
+  // them in `court_year` and the citation as quoted does not always carry them — a short form
+  // never does — so where the text shows no year, putting the parenthetical back is restoring what
+  // the filing showed. It is not decoration: a verifier that cannot read a year cannot judge
+  // whether a volume is too recent to be missing from an index, and cannot ask a search by name at
+  // all, so the citation goes to the coverage rule with nothing to weigh. Six records in v0.2 are
+  // in that position, every one of them with the year sitting in the field next to the citation.
+  const courtYear = typeof cited.court_year === 'string' ? cited.court_year.trim() : '';
+  const full = courtYear && YEAR_RE.test(courtYear) && !YEAR_RE.test(text) ? `${text} (${courtYear})` : text;
+  return full.slice(0, CONTEXT_MAX);
 }
 
 /** Maps one benchmark record onto the claim shape the verification API expects. */
