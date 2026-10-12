@@ -220,21 +220,43 @@ function mockVerify(batchEntries, batchIndex) {
   };
 }
 
-export async function realVerify(args, claims) {
-  let res;
+/** How often a batch the server answered with a job is asked for again. */
+const POLL_MS = 2_000;
+
+async function send(url, init) {
   try {
-    res = await fetch(`${args.api}/api/internal/verify`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${args.token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ claims, says: 'all', archive: false, holds: { ids: [] } }),
-      signal: AbortSignal.timeout(args.batchTimeoutMs ?? BATCH_TIMEOUT_MS),
-    });
+    return await fetch(url, init);
   } catch (err) {
     // Network-level failure (DNS, connection refused, timeout, ...) — retryable.
     throw new Error(`network error: ${err.message}`);
+  }
+}
+
+/**
+ * One batch, start to answer. The request asks to be answered at once (`Prefer: respond-async`):
+ * a proxy in front of the API cuts any request whose answer has not started in a hundred seconds,
+ * and a batch can take three minutes. A server that honours the preference answers 202 with a job
+ * to poll; one that does not answers the batch itself, as before. The batch timeout covers both.
+ */
+export async function realVerify(args, claims) {
+  const signal = AbortSignal.timeout(args.batchTimeoutMs ?? BATCH_TIMEOUT_MS);
+  const auth = { Authorization: `Bearer ${args.token}` };
+  let res = await send(`${args.api}/api/internal/verify`, {
+    method: 'POST',
+    headers: { ...auth, 'Content-Type': 'application/json', Prefer: 'respond-async' },
+    body: JSON.stringify({ claims, says: 'all', archive: false, holds: { ids: [] } }),
+    signal,
+  });
+  if (res.status === 202) {
+    const { poll } = await res.json();
+    const pollUrl = new URL(poll, `${args.api}/`).href;
+    for (;;) {
+      await sleep(args.pollMs ?? POLL_MS);
+      res = await send(pollUrl, { headers: auth, signal });
+      if (res.status !== 202) break;
+    }
+    // The job is gone: the server restarted under it. The batch itself was fine — send it again.
+    if (res.status === 404) throw new Error('job lost (the server restarted)');
   }
   if (res.status >= 500) {
     // Server-side failure — retryable.
