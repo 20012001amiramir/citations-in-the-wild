@@ -1,0 +1,53 @@
+{
+  "date": "2026-10-17",
+  "n": 197,
+  "n_scored": 34,
+  "n_insufficient": 163,
+  "insufficient_share": 0.827,
+  "partial": false,
+  "cost_usd": 0,
+  "exists": {
+    "precision": 1,
+    "recall": 0.203
+  },
+  "says": {
+    "match_rate": 0.157
+  },
+  "balanced_accuracy": 1,
+  "per_class": {
+    "EXISTS_FAIL": {
+      "p": 1,
+      "r": 1,
+      "f1": 1
+    },
+    "SAYS_FAIL": {
+      "p": 1,
+      "r": 1,
+      "f1": 1
+    },
+    "PASS": {
+      "p": 1,
+      "r": 1,
+      "f1": 1
+    }
+  },
+  "registry_methods": {
+    "name_search": 24,
+    "lookup": 26,
+    "search": 128,
+    "none": 19
+  },
+  "insufficient_why": {
+    "not_settled": 8,
+    "registry_refused": 125,
+    "locator_unsupported": 18,
+    "registry_index": 5,
+    "copy_did_not_come": 5,
+    "citation_incomplete": 1,
+    "other": 1
+  },
+  "engine": {
+    "name": "exhibitb",
+    "version": "0.2.4"
+  }
+}
